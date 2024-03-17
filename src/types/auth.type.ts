@@ -6,3 +6,8 @@ export interface interfaceRegister {
   confirmPassword: string
   address: string
 }
+
+export interface interfaceLogin {
+  username: string
+  password: string
+}

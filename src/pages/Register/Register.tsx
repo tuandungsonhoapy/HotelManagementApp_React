@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom'
 import styles from './Register.module.scss'
 import { defaultFormRegister } from 'constants/register'
 import { useRef, useState } from 'react'
-import { interfaceRegister } from 'types/register.type'
-import http from 'Utils/httpRequest'
+import { interfaceRegister } from 'types/auth.type'
 import { toast } from 'react-toastify'
+import configRoutes from '../../config/routes'
+import { registerUser } from 'services/authService'
 
 const cx = classNames.bind(styles)
 
@@ -17,6 +18,12 @@ interface formError {
   username: boolean
   address: boolean
   phone: boolean
+}
+
+interface dataResponse {
+  message: string
+  code: number
+  data: any
 }
 
 const defaultError: formError = {
@@ -67,25 +74,27 @@ const Register = () => {
   }
 
   const handleLogin = () => {
-    navigate('/login')
+    navigate(configRoutes.login)
   }
 
   const handleRegister = () => {
     let check = validateFormRegister()
     if (check === true) {
-      http
-        .post('register', {
-          email: formRegister.email,
-          password: formRegister.password,
-          username: formRegister.username,
-          phone: formRegister.phone,
-          address: formRegister.address
-        })
+      registerUser(formRegister)
         .then((response: any) => {
-          console.log(response)
+          const data: dataResponse = response.data
+          console.log(data)
+          if (response.status === 200 && data.code === 0) {
+            toast.success(data.message)
+            navigate(configRoutes.login)
+          }
+          if (response.status === 200 && data.code !== 0) {
+            toast.error(data.message)
+          }
         })
         .catch((error: any) => {
-          toast.error('Register failed!')
+          const data: dataResponse = error.response.data
+          toast.error(data.message)
         })
     }
   }

@@ -1,4 +1,4 @@
-import { interfaceRegister } from 'types/register.type'
+import { interfaceRegister, interfaceLogin } from 'types/auth.type'
 
 export const defaultFormRegister: interfaceRegister = {
   email: '',
@@ -7,4 +7,9 @@ export const defaultFormRegister: interfaceRegister = {
   password: '',
   confirmPassword: '',
   address: ''
+}
+
+export const defaultFormLogin: interfaceLogin = {
+  username: '',
+  password: ''
 }
