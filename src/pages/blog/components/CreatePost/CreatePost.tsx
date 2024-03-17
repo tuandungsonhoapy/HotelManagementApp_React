@@ -11,7 +11,6 @@ interface FormError {
 }
 
 function CreatePost() {
-  console.log('re-render')
   const [formData, setFormData] = useState<Post>(defaultPost)
   const [formError, setFormError] = useState<null | FormError>(null)
   const editPostValue = useSelector((state: RootState) => state.blog.editPostValue)

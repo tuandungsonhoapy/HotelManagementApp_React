@@ -4,16 +4,31 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import { publicRoutes } from 'routes'
 import Nav from 'components/Navigation'
+import DefaultLayout from 'layouts/DefaultLayout'
+import { Fragment } from 'react/jsx-runtime'
 
 function App() {
   return (
     <Router>
       <div className='App'>
-        <Nav />
         <Routes>
           {publicRoutes.map((route, index) => {
             const Page = route.component
-            return <Route key={index} path={route.path} element={<Page />} />
+            let Layout: any = Fragment
+            if (route.layout) {
+              Layout = route.layout
+            }
+            return (
+              <Route
+                key={index}
+                path={route.path}
+                element={
+                  <Layout>
+                    <Page />
+                  </Layout>
+                }
+              />
+            )
           })}
         </Routes>
         <ToastContainer

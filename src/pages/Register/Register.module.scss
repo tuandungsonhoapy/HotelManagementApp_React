@@ -1,0 +1,22 @@
+.register_container {
+  min-height: 100vh;
+
+  .content-right {
+    border-radius: 8px;
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.1),
+      0 8px 16px rgba(0, 0, 0, 0.1);
+
+    .forgot-password {
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    hr {
+      width: 100%;
+    }
+  }
+}
