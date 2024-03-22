@@ -12,6 +12,8 @@ import iconSettings from './iconSettings.svg'
 import iconLiveStudio from './iconLiveStudio.svg'
 import iconLogout from './iconLogout.svg'
 import noImage from './no-image.png'
+import logoMogi from './logoMogi.svg'
+import logoZalo from './logoZalo.svg'
 
 const images = {
   logo,
@@ -27,7 +29,9 @@ const images = {
   iconSettings,
   iconLiveStudio,
   iconLogout,
-  noImage
+  noImage,
+  logoMogi,
+  logoZalo
 }
 
 export default images

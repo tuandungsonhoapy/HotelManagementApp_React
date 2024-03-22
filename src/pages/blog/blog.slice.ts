@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, createAsyncThunk, nanoid, AsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction, createAsyncThunk, AsyncThunk } from '@reduxjs/toolkit'
 import http from 'Utils/httpRequest'
 import { initalPostList } from 'constants/blog'
 import { Post } from 'types/blog.type'

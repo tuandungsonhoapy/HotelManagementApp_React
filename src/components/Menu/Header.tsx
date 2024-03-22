@@ -17,7 +17,7 @@ const Header = ({ title, onBack }: propsHeader) => {
       <button className={cx('back-btn')} onClick={onBack}>
         <FontAwesomeIcon icon={faChevronLeft} />
       </button>
-      <h4 className={cx('header-title')}>{title}</h4>
+      <h5 className={cx('header-title')}>{title}</h5>
     </header>
   )
 }

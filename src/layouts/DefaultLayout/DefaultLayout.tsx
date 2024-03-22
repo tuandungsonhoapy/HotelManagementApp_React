@@ -2,12 +2,9 @@ import classNames from 'classnames/bind'
 import Header from 'layouts/components/Header'
 import styles from './DefaultLayout.module.scss'
 import Footer from 'layouts/components/Footer'
+import { DefaultLayoutProps } from 'interfaces/layout.interface'
 
 const cx = classNames.bind(styles)
-
-interface DefaultLayoutProps {
-  children: React.ReactNode
-}
 
 const DefaultLayout = ({ children }: DefaultLayoutProps) => {
   return (

@@ -6,7 +6,7 @@ import { defaultFormRegister } from 'constants/register'
 import { useRef, useState } from 'react'
 import { interfaceRegister } from 'types/auth.type'
 import { toast } from 'react-toastify'
-import configRoutes from '../../config/routes'
+import configRoutes from '../../config'
 import { registerUser } from 'services/authService'
 
 const cx = classNames.bind(styles)
@@ -74,7 +74,7 @@ const Register = () => {
   }
 
   const handleLogin = () => {
-    navigate(configRoutes.login)
+    navigate(configRoutes.routes.login)
   }
 
   const handleRegister = () => {
@@ -86,7 +86,7 @@ const Register = () => {
           console.log(data)
           if (response.status === 200 && data.code === 0) {
             toast.success(data.message)
-            navigate(configRoutes.login)
+            navigate(configRoutes.routes.login)
           }
           if (response.status === 200 && data.code !== 0) {
             toast.error(data.message)

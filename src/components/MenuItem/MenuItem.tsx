@@ -6,7 +6,7 @@ const cx = classNames.bind(styles)
 
 interface menuItemProps {
   item: any
-  onClick: any
+  onClick: Function
 }
 
 const MenuItem = ({ item, onClick }: menuItemProps) => {
