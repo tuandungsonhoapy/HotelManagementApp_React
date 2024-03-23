@@ -1,13 +1,20 @@
 export interface interfaceRegister {
-  email: string
-  phone: string
+  firstName: string
+  lastName: string
   username: string
   password: string
   confirmPassword: string
-  address: string
+  phone: string
+  avatar: string
 }
 
 export interface interfaceLogin {
   username: string
   password: string
+}
+
+export interface dataResponse {
+  message: string
+  code: number
+  data: any
 }

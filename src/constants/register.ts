@@ -1,12 +1,13 @@
 import { interfaceRegister, interfaceLogin } from 'types/auth.type'
 
 export const defaultFormRegister: interfaceRegister = {
-  email: '',
-  phone: '',
+  firstName: '',
+  lastName: '',
   username: '',
   password: '',
   confirmPassword: '',
-  address: ''
+  phone: '',
+  avatar: ''
 }
 
 export const defaultFormLogin: interfaceLogin = {

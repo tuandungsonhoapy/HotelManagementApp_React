@@ -4,7 +4,7 @@ import images from '../../assets/images'
 import styles from './Image.module.scss'
 
 interface imageProps {
-  src?: string
+  src?: string | null
   alt?: string
   className?: string
   fallback?: string
@@ -25,7 +25,7 @@ const Image = forwardRef(
       <img
         className={classNames(styles.wrapper, className)}
         ref={ref}
-        src={fallback || src}
+        src={src || images.iconUserLogin || fallback}
         alt={alt}
         {...props}
         onError={handleError}

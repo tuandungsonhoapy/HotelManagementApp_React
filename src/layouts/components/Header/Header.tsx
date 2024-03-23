@@ -91,7 +91,7 @@ function Header() {
       <div className={cx('inner', 'container')}>
         <div className={cx('navbar_logo')}>
           <Link to={config.routes.home} className={cx('logo_tiktok')}>
-            <img className={cx('logo_branch')} src={images.logoMogi} alt='Tiktok' />
+            <img width={'100'} height={'32'} src={images.logoMogi} alt='Mogi' />
           </Link>
         </div>
         <div className={cx('navbar_menu')}>
@@ -101,7 +101,17 @@ function Header() {
           <Link to={configRoutes.routes.hoiDap}>Hỏi đáp</Link>
           <Link to={configRoutes.routes.moiGioi}>Môi giới</Link>
           <Link to={configRoutes.routes.duAn}>Dự án</Link>
-          <Link to={configRoutes.routes.login}>Đăng nhập</Link>
+          {currentUser.isAuthenticated ? (
+            <>
+              <Menu MENU={userMenu} onChange={handleMenuChange}>
+                <Image className={cx('user-avatar')} src={currentUser.token.avatar} />
+              </Menu>
+            </>
+          ) : (
+            <>
+              <Link to={configRoutes.routes.login}>Đăng nhập</Link>
+            </>
+          )}
         </div>
         <div className={cx('navbar_user')}>
           <Link to={configRoutes.routes.login}>Đăng tin</Link>
@@ -109,30 +119,6 @@ function Header() {
 
         {/* {Phần html dư} */}
         <div className={cx('actions')}>
-          {currentUser.isAuthenticated ? (
-            <>
-              {/* <Button leftIcon={<FontAwesomeIcon icon={faPlus} />} bordered>
-                Upload
-              </Button> */}
-              {/* <Tippy content='Giỏ hàng' placement='bottom'>
-                <div className={cx('box-icon-messages')}>
-                  <Link to='/cart' />
-                  <FontAwesomeIcon className={cx('icon-cart-shopping')} icon={faCartShopping} />
-                </div>
-              </Tippy> */}
-              {/* <Tippy content='Inbox' placement='bottom'>
-                <div className={cx('box-icon-inbox')}>
-                  <img src={images.iconInbox} alt='Inbox' />
-                </div>
-              </Tippy> */}
-            </>
-          ) : (
-            <>
-              {/* <Button onClick={handleClickLogin} primary>
-                Log in
-              </Button> */}
-            </>
-          )}
           {currentUser.isAuthenticated ? (
             <>
               {/* <Menu MENU={userMenu} onChange={handleMenuChange}>

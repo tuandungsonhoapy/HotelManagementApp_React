@@ -190,10 +190,11 @@
 }
 
 .user-avatar {
-  width: 42px;
-  height: 42px;
+  width: 30px;
+  height: 30px;
   object-fit: cover;
   border-radius: 50%;
-  margin-left: 14px;
+  margin-left: 5px;
+  margin-right: 20px;
   cursor: pointer;
 }
