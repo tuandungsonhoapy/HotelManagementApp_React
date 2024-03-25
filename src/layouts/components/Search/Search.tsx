@@ -34,7 +34,7 @@ function Search() {
       setLoading(false)
     }
 
-    fetchApi()
+    // fetchApi()
   }, [debouncedValue])
 
   const handleClickClear = () => {
@@ -69,7 +69,7 @@ function Search() {
   )
 
   return (
-    <div>
+    <div className={cx('search_component')}>
       <Tippy
         interactive
         visible={showResult && searchResult.length > 0}
@@ -79,7 +79,7 @@ function Search() {
       >
         <div className={cx('search')}>
           <input
-            placeholder='Search for information on land and blogs'
+            placeholder='Từ khóa, Đường, Quận hoặc địa danh ...'
             spellCheck={false}
             onChange={handleChangeInput}
             value={searchValue}

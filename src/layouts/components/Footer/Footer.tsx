@@ -7,7 +7,7 @@ const cx = classNames.bind(styles)
 
 const Footer = (props: any) => {
   return (
-    <footer className='text-center text-lg-start text-dark' style={{ backgroundColor: '#ECEFF1' }}>
+    <footer className={cx('text-center text-lg-start text-dark', 'mogi-footer')} style={{ backgroundColor: '#ECEFF1' }}>
       <section>
         <div className='container text-center text-md-start pt-4'>
           {/* Grid row */}

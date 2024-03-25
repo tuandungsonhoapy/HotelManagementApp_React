@@ -193,7 +193,7 @@ const Login = () => {
   }, [])
 
   return (
-    <div className={cx('login_container', 'mt-3')}>
+    <div className={cx('login_container')}>
       <div className={cx('login_panel')}>
         <div className={cx('login_panel_header')}>
           <div
@@ -217,7 +217,9 @@ const Login = () => {
                   <input
                     onKeyPress={handlePressEnter}
                     placeholder='Tên đăng nhập'
-                    className={cx('form-control', 'input_username')}
+                    className={cx('form-control', 'input_username', {
+                      'is-invalid': formErrorLogin.username
+                    })}
                     type='text'
                     value={formLogin.username}
                     onChange={(e) => disPatch(setUsernameLogin(e.target.value))}
@@ -227,7 +229,9 @@ const Login = () => {
                   <input
                     onKeyPress={handlePressEnter}
                     placeholder='Mật khẩu'
-                    className={cx('form-control', 'input_password')}
+                    className={cx('form-control', 'input_password', {
+                      'is-invalid': formErrorLogin.password
+                    })}
                     type='password'
                     value={formLogin.password}
                     onChange={(e) => disPatch(setPasswordLogin(e.target.value))}

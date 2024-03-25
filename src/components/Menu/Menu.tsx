@@ -6,6 +6,9 @@ import styles from './Menu.module.scss'
 import MenuItem from '../MenuItem'
 import Header from './Header'
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { RootState } from 'store'
+import images from 'assets/images'
 
 const cx = classNames.bind(styles)
 
@@ -18,6 +21,7 @@ interface menuProps {
 
 function Menu({ children, MENU, hideOnClick = false, onChange }: menuProps) {
   const [history, setHistory] = useState([{ data: MENU }])
+  const currentUser = useSelector((state: RootState) => state.auth.user)
 
   const getMenuAndTitle = () => {
     const currentHistory: any = history[history.length - 1]
@@ -58,6 +62,9 @@ function Menu({ children, MENU, hideOnClick = false, onChange }: menuProps) {
     <div className={cx('content')} tabIndex='-1' {...attrs}>
       <PopperWrapper>
         {title && title.length > 0 && <Header title={title} onBack={handleBack} />}
+        {!title && currentUser.isAuthenticated && (
+          <Header src={currentUser.token.avatar || images.iconUserLogin} username={currentUser.token.username} />
+        )}
         <div className={cx('menu-body')}>{renderMenuItems()}</div>
       </PopperWrapper>
     </div>
