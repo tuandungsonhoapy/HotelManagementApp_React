@@ -7,7 +7,8 @@ export const defaultFormRegister: interfaceRegister = {
   password: '',
   confirmPassword: '',
   phone: '',
-  avatar: ''
+  avatar: '',
+  groupId: 1
 }
 
 export const defaultFormLogin: interfaceLogin = {

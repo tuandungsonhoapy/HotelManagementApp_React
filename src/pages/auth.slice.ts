@@ -37,7 +37,8 @@ const initalState: AuthState = {
     password: '',
     phone: '',
     confirmPassword: '',
-    avatar: ''
+    avatar: '',
+    groupId: 1
   }
 }
 
@@ -106,6 +107,13 @@ export const authSlice = createSlice({
     },
     setPasswordLogin: (state, action: PayloadAction<string>) => {
       state.loginInfo.password = action.payload
+    },
+    setGroupRegister: (state, action: PayloadAction<number>) => {
+      state.registerInfo.groupId = action.payload
+    },
+    setShowUpdateUser: (state, action: PayloadAction<interfaceRegister>) => {
+      console.log(action.payload)
+      state.registerInfo = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -135,7 +143,9 @@ export const {
   setPhoneRegister,
   setPasswordRegister,
   setUsernameLogin,
-  setPasswordLogin
+  setPasswordLogin,
+  setGroupRegister,
+  setShowUpdateUser
 } = authSlice.actions
 
 const authReducer = authSlice.reducer

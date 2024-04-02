@@ -79,6 +79,11 @@ function Header() {
     },
     ...MENU,
     {
+      icon: images.iconViewProfile,
+      title: 'User management',
+      to: configRoutes.routes.user
+    },
+    {
       icon: images.iconLogout,
       title: 'Log out',
       to: configRoutes.routes.logout,
@@ -100,7 +105,7 @@ function Header() {
           <Link to={configRoutes.routes.giaNhaDat}>Giá nhà đất</Link>
           <Link to={configRoutes.routes.hoiDap}>Hỏi đáp</Link>
           <Link to={configRoutes.routes.moiGioi}>Môi giới</Link>
-          <Link to={configRoutes.routes.duAn}>Dự án</Link>
+          <Link to={configRoutes.routes.blog}>Blogs</Link>
           {currentUser.isAuthenticated ? (
             <>
               <Menu MENU={userMenu} onChange={handleMenuChange}>

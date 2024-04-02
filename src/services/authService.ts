@@ -9,4 +9,21 @@ const loginUser = (data: interfaceLogin) => {
   return http.post('login', data)
 }
 
-export { registerUser, loginUser }
+const getUserWithPagination = (currentPage: number, currentLimit: number) => {
+  return http.get('users', {
+    params: {
+      page: currentPage,
+      limit: currentLimit
+    }
+  })
+}
+
+const createUser = (data: interfaceRegister) => {
+  return http.post('user/create', data)
+}
+
+const updateUser = (data: interfaceRegister) => {
+  return http.put('user/update', data)
+}
+
+export { registerUser, loginUser, getUserWithPagination, createUser, updateUser }

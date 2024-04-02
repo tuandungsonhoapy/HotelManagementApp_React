@@ -1,11 +1,14 @@
 export interface interfaceRegister {
+  id?: number
   firstName: string
   lastName: string
   username: string
   password: string
-  confirmPassword: string
+  confirmPassword?: string
   phone: string
-  avatar: string
+  avatar?: string
+  groupId: number
+  [key: string]: string | number | undefined
 }
 
 export interface interfaceLogin {

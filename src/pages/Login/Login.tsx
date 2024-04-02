@@ -187,6 +187,12 @@ const Login = () => {
     }
   }
 
+  const handlePressEnterRegister = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && e.charCode === 13) {
+      handleRegister()
+    }
+  }
+
   useLayoutEffect(() => {
     if (authentication.user.isAuthenticated) navigate(configRoutes.routes.home)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -289,6 +295,7 @@ const Login = () => {
                 <div className={cx('div-group', 'form-group', 'password', 'form-name')}>
                   <input
                     placeholder='Họ'
+                    onKeyPress={handlePressEnterRegister}
                     className={cx('form-control', 'input_Ho', {
                       'is-invalid': formErrorRegister.firstName
                     })}
@@ -298,6 +305,7 @@ const Login = () => {
                   />
                   <input
                     placeholder='Tên'
+                    onKeyPress={handlePressEnterRegister}
                     className={cx('form-control', 'input_Ten', {
                       'is-invalid': formErrorRegister.lastName
                     })}
@@ -309,6 +317,7 @@ const Login = () => {
                 <div className={cx('div-group', 'form-group')}>
                   <input
                     placeholder='Tên đăng nhập'
+                    onKeyPress={handlePressEnterRegister}
                     className={cx('form-control', 'input_username', {
                       'is-invalid': formErrorRegister.username
                     })}
@@ -320,6 +329,7 @@ const Login = () => {
                 <div className={cx('div-group', 'form-group', 'password')}>
                   <input
                     placeholder='Mật khẩu'
+                    onKeyPress={handlePressEnterRegister}
                     className={cx('form-control', 'input_password', {
                       'is-invalid': formErrorRegister.password
                     })}
@@ -330,6 +340,7 @@ const Login = () => {
                 </div>
                 <div className={cx('div-group', 'form-group', 'password')}>
                   <input
+                    onKeyPress={handlePressEnterRegister}
                     placeholder='Xác nhận mật khẩu'
                     className={cx('form-control', 'input_password', {
                       'is-invalid': formErrorRegister.confirmPassword
@@ -345,6 +356,7 @@ const Login = () => {
                     className={cx('form-control', 'input_phone', {
                       'is-invalid': formErrorRegister.phone
                     })}
+                    onKeyPress={handlePressEnterRegister}
                     type='text'
                     value={authentication.registerInfo.phone}
                     onChange={(e) => disPatch(setPhoneRegister(e.target.value))}
