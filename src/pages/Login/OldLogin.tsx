@@ -61,12 +61,12 @@ const OldLogin = () => {
       toast.error('Vui lòng nhập đầy đủ thông tin đăng nhập!')
     } else {
       loginUser(formLogin)
-        .then((response) => {
-          if (response.status === 200 && response.data.code === 0) {
-            disPatch(LoginUserAction(response.data.data))
+        .then((response: any) => {
+          if (response.status === 200 && response.code === 0) {
+            disPatch(LoginUserAction(response.data))
             navigate(configRoutes.routes.home)
           }
-          if (response.status === 200 && response.data.code !== 0) toast.error(response.data.message)
+          if (response.status === 200 && response.code !== 0) toast.error(response.message)
         })
         .catch((error) => {
           toast.error(error.response.data.message)

@@ -111,11 +111,11 @@ const UserManagementPage = () => {
   const fetchUserList = () => {
     getUserWithPagination(currentPage, currentLimit)
       .then((response) => {
-        console.log(response)
-        setUsersList(response.data.data.users)
-        setTotalPages(response.data.data.totalPages)
+        console.log('>>>>>>>>>>>>>>check response: ', response)
+        setUsersList(response.data.users)
+        setTotalPages(response.data.totalPages)
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error('Lỗi không thể lấy thông tinh danh sách tài khoản người dùng!')
       })
   }
@@ -144,7 +144,7 @@ const UserManagementPage = () => {
         }
       })
       .then((response) => {
-        if (response && response.data.status === 200) {
+        if (response && response.status === 200) {
           try {
             fetchUserList()
             toast.success('Delete successfully!')
@@ -174,7 +174,7 @@ const UserManagementPage = () => {
   //Function create user
   const handleCreateUser = async (data: interfaceRegister) => {
     const result = await createUser(data).then((response: any) => {
-      if (response && response.data.status === 200 && response.data.code === 0) {
+      if (response && response.status === 200 && response.code === 0) {
         try {
           fetchUserList()
           toast.success('Create user successfully!')
@@ -183,14 +183,14 @@ const UserManagementPage = () => {
         }
         return {
           check: true,
-          data: response.data.data
+          data: response.data
         }
       }
-      if (response && response.data.status === 200 && response.data.code === 1) {
-        toast.error(response.data.message)
+      if (response && response.status === 200 && response.code === 1) {
+        toast.error(response.message)
         return {
           check: false,
-          data: response.data.data
+          data: response.data
         }
       }
     })
@@ -200,8 +200,8 @@ const UserManagementPage = () => {
 
   //Function update user
   const handleUpdateUser = async (data: interfaceRegister) => {
-    const result = await updateUser(data).then((response) => {
-      if (response && response.data.status === 200 && response.data.code === 0) {
+    const result = await updateUser(data).then((response: any) => {
+      if (response && response.status === 200 && response.code === 0) {
         try {
           fetchUserList()
           toast.success('Update user successfully!')
@@ -210,14 +210,14 @@ const UserManagementPage = () => {
         }
         return {
           check: true,
-          data: response.data.data
+          data: response.data
         }
       }
-      if (response && response.data.status === 200 && response.data.code === 1) {
-        toast.error(response.data.message)
+      if (response && response.status === 200 && response.code === 1) {
+        toast.error(response.message)
         return {
           check: false,
-          data: response.data.data
+          data: response.data
         }
       }
       toast.error('Something wrongs with server!')

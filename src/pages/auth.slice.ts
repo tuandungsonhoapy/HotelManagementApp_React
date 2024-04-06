@@ -47,7 +47,7 @@ export const register = createAsyncThunk<any, interfaceRegister>(
   async (body: interfaceRegister, thunkApi) => {
     try {
       const response = await http.post<dataResponse>('register', body)
-      return response.data
+      return response
     } catch (error: any) {
       if (error.name === 'AxiosError') return thunkApi.rejectWithValue(error.response.data)
       throw error
@@ -59,7 +59,7 @@ export const login = createAsyncThunk('auth/login', async (body: interfaceLogin,
   try {
     const response = await http.post<dataResponse>('login', body)
     console.log(response)
-    return response.data
+    return response
   } catch (error: any) {
     if (error.name === 'AxiosError') return thunkApi.rejectWithValue(error.response.data)
     throw error

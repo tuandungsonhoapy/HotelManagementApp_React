@@ -81,10 +81,10 @@ function UserModal({ title, showModal, handleHileModal, action, handleCreateUser
     http
       .get('groups')
       .then((response) => {
-        setGroupList(response.data.data)
+        setGroupList(response.data)
       })
       .catch((error) => {
-        toast.error(error.data.message)
+        toast.error(error.message)
       })
   }, [])
 
