@@ -1,0 +1,188 @@
+.login_container {
+  min-height: 80vh;
+  font-size: 1rem;
+  margin: auto;
+  display: flex;
+  padding: 140px;
+  justify-content: center;
+
+  .login_panel {
+    float: left;
+    width: 680px;
+    // height: 282px;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.1);
+
+    .login_panel_header {
+      display: block;
+      height: 40px;
+      border-bottom: solid 1px #eaeaea;
+      display: flex;
+
+      .tab-option {
+        float: left;
+        padding: 0 20px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #222;
+        line-height: 40px;
+        cursor: pointer;
+
+        &:hover {
+          color: #027b88;
+          cursor: pointer;
+        }
+      }
+    }
+
+    .login_panel_body {
+      padding: 30px 15px;
+      width: 680px;
+
+      .content_left {
+        float: left;
+        padding: 0 15px;
+
+        .login-form {
+          .form-btn-login {
+            .link-forgotpassword {
+              margin-left: 15px;
+              padding-left: 0;
+              font-weight: normal;
+              color: #337ab7;
+
+              &:hover {
+                color: green;
+              }
+            }
+          }
+        }
+      }
+
+      .content_right {
+        float: right;
+        border-left: solid 1px #eaeaea;
+        padding: 0 15px;
+      }
+    }
+  }
+
+  .active {
+    border-top: 3px solid #104b8c;
+    border-right: solid 1px #eaeaea;
+    background-color: #fff;
+    border-left: solid 1px #eaeaea;
+  }
+
+  .div-group {
+    margin-bottom: 15px;
+
+    .btn-link-register {
+      text-decoration: none;
+      color: #337ab7;
+
+      &:hover {
+        color: green;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .form-extend-login {
+    .btn-social {
+      width: 230px;
+      margin-bottom: 15px;
+      padding: 5px 10px 5px 8px;
+      color: white;
+      font-size: 0.85rem;
+      align-items: flex-start;
+      display: flex;
+      border-radius: 6px;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .btn-facebook {
+      float: left;
+      background-color: #3b5998;
+
+      &:hover {
+        color: #fff;
+        background-color: #2d4373;
+        border-color: rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    .btn-google {
+      float: left;
+      background-color: #dd4b39;
+
+      &:hover {
+        color: #fff;
+        background-color: #c23321;
+        border-color: rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    .btn-zalo {
+      float: left;
+      background-color: #008ff3;
+
+      &:hover {
+        color: #fff;
+        background-color: #008fe5;
+        border-color: rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    .text-login {
+      text-align: left;
+    }
+
+    .fa {
+      font-size: 18px;
+      margin-right: 6px;
+
+      img {
+        width: 17.15px;
+        height: 27px;
+      }
+    }
+  }
+
+  .form-name {
+    display: flex;
+  }
+
+  .input_Ho {
+    margin-right: 5px;
+  }
+
+  .input_Ten {
+    margin-left: 5px;
+  }
+
+  .icon_continue {
+    margin-left: 10px;
+  }
+
+  // .content-right {
+  //   border-radius: 8px;
+  //   box-shadow:
+  //     0 2px 4px rgba(0, 0, 0, 0.1),
+  //     0 8px 16px rgba(0, 0, 0, 0.1);
+
+  //   .forgot-password {
+  //     cursor: pointer;
+
+  //     &:hover {
+  //       text-decoration: underline;
+  //     }
+  //   }
+
+  //   hr {
+  //     width: 100%;
+  //   }
+  // }
+}
