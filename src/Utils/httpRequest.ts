@@ -1,4 +1,6 @@
 import axios, { AxiosInstance } from 'axios'
+import { toast } from 'react-toastify'
+import { dataResponse } from 'types/auth.type'
 
 const AUTH_TOKEN = ''
 
@@ -10,6 +12,7 @@ class Http {
       timeout: 10000
     })
     this.instance.defaults.headers.common['Authorization'] = AUTH_TOKEN
+    this.instance.defaults.withCredentials = true
 
     // Add a request interceptor
     this.instance.interceptors.request.use(
@@ -33,7 +36,43 @@ class Http {
       function (error) {
         // Any status codes that falls outside the range of 2xx cause this function to trigger
         // Do something with response error
-        return Promise.reject(error.data)
+        const status = error.response?.status || 500
+        switch (status) {
+          // authentication (token related issues)
+          case 401: {
+            return Promise.reject(error)
+          }
+
+          // forbidden (permission related issues)
+          case 403: {
+            return Promise.reject(error)
+          }
+
+          // bad request
+          case 400: {
+            return Promise.reject(error)
+          }
+
+          // not found
+          case 404: {
+            return Promise.reject(error)
+          }
+
+          // conflict
+          case 409: {
+            return Promise.reject(error)
+          }
+
+          // unprocessable
+          case 422: {
+            return Promise.reject(error)
+          }
+
+          // generic api error (server related) unexpected
+          default: {
+            return Promise.reject(error)
+          }
+        }
       }
     )
   }

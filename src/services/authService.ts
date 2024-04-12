@@ -26,4 +26,8 @@ const updateUser = (data: interfaceRegister) => {
   return http.put('user/update', data)
 }
 
-export { registerUser, loginUser, getUserWithPagination, createUser, updateUser }
+const getUserAccount = () => {
+  return http.get('account')
+}
+
+export { registerUser, loginUser, getUserWithPagination, createUser, updateUser, getUserAccount }

@@ -13,18 +13,25 @@ type FulfilledAction = ReturnType<GenericAsyncThunk['fulfilled']>
 interface interfaceUserLogin {
   isAuthenticated: boolean
   token: any
+  username: string
+  avatar: string
+  groupWithRoles: any
 }
 
 interface AuthState {
   user: interfaceUserLogin
   loginInfo: interfaceLogin
   registerInfo: interfaceRegister
+  pageLoading: any
 }
 
 const initalState: AuthState = {
   user: {
     isAuthenticated: false,
-    token: null
+    token: null,
+    username: '',
+    avatar: '',
+    groupWithRoles: {}
   },
   loginInfo: {
     username: '',
@@ -39,6 +46,9 @@ const initalState: AuthState = {
     confirmPassword: '',
     avatar: '',
     groupId: 1
+  },
+  pageLoading: {
+    isShow: true
   }
 }
 
@@ -57,8 +67,7 @@ export const register = createAsyncThunk<any, interfaceRegister>(
 
 export const login = createAsyncThunk('auth/login', async (body: interfaceLogin, thunkApi) => {
   try {
-    const response = await http.post<dataResponse>('login', body)
-    console.log(response)
+    const response = await http.post<any>('login', body)
     return response
   } catch (error: any) {
     if (error.name === 'AxiosError') return thunkApi.rejectWithValue(error.response.data)
@@ -114,6 +123,20 @@ export const authSlice = createSlice({
     setShowUpdateUser: (state, action: PayloadAction<interfaceRegister>) => {
       console.log(action.payload)
       state.registerInfo = action.payload
+    },
+    setLogin: (state, action: PayloadAction<any>) => {
+      const data = action.payload
+      state.user.token = data.access_token
+      state.user.username = data.user.username
+      state.user.avatar = data.user.avatar
+      state.user.groupWithRoles = data.user.groupWithRoles
+      state.user.isAuthenticated = true
+    },
+    setShowPageLoading: (state) => {
+      state.pageLoading.isShow = true
+    },
+    setHiddenPageLogin: (state) => {
+      state.pageLoading.isShow = false
     }
   },
   extraReducers: (builder) => {
@@ -125,7 +148,10 @@ export const authSlice = createSlice({
         state.registerInfo = defaultFormRegister
         state.loginInfo = defaultFormLogin
         state.user.isAuthenticated = true
-        state.user.token = action.payload.data || null
+        state.user.token = action.payload.data.access_token || null
+        state.user.avatar = action.payload.data.user.avatar
+        state.user.username = action.payload.data.user.username
+        state.user.groupWithRoles = action.payload.data.groupWithRoles
       })
       .addDefaultCase((state) => state)
   }
@@ -145,7 +171,10 @@ export const {
   setUsernameLogin,
   setPasswordLogin,
   setGroupRegister,
-  setShowUpdateUser
+  setShowUpdateUser,
+  setLogin,
+  setShowPageLoading,
+  setHiddenPageLogin
 } = authSlice.actions
 
 const authReducer = authSlice.reducer

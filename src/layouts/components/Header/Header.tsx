@@ -109,7 +109,7 @@ function Header() {
           {currentUser.isAuthenticated ? (
             <>
               <Menu MENU={userMenu} onChange={handleMenuChange}>
-                <Image className={cx('user-avatar')} src={currentUser.token.avatar} />
+                <Image className={cx('user-avatar')} src={currentUser.avatar} />
               </Menu>
             </>
           ) : (

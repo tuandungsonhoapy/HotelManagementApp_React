@@ -2,6 +2,8 @@
 import UserManagementPage from 'pages/UserManagement'
 
 //Layouts
+import DefaultLayout from 'layouts/DefaultLayout'
+import { DefaultLayoutProps } from 'interfaces/layout.interface'
 
 //routesConfig
 import config from '../config'
@@ -10,8 +12,6 @@ import { Route, Routes, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store'
-import { DefaultLayoutProps } from 'interfaces/layout.interface'
-import DefaultLayout from 'layouts/DefaultLayout'
 
 interface privateRoute {
   path: string
@@ -31,7 +31,7 @@ const PrivateRoutes = () => {
 
   const CheckPrivateRoute = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
-      if (currentUser.isAuthenticated === false || currentUser.token.groupId === 1) {
+      if (currentUser.isAuthenticated === false) {
         navigate(-1)
       }
     })

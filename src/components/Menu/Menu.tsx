@@ -63,7 +63,7 @@ function Menu({ children, MENU, hideOnClick = false, onChange }: menuProps) {
       <PopperWrapper>
         {title && title.length > 0 && <Header title={title} onBack={handleBack} />}
         {!title && currentUser.isAuthenticated && (
-          <Header src={currentUser.token.avatar || images.iconUserLogin} username={currentUser.token.username} />
+          <Header src={currentUser.avatar || images.iconUserLogin} username={currentUser.username} />
         )}
         <div className={cx('menu-body')}>{renderMenuItems()}</div>
       </PopperWrapper>
