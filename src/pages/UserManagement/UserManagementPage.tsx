@@ -13,6 +13,10 @@ import { interfaceRegister } from 'types/auth.type'
 import { useAppDispatch } from 'store'
 import { setShowUpdateUser } from 'pages/auth.slice'
 import { defaultFormRegister } from 'constants/register'
+import { Link } from 'react-router-dom'
+import configRoutes from '../../config'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
 
 const initialUser: interfaceUser = {
   id: 0,
@@ -233,9 +237,12 @@ const UserManagementPage = () => {
     <>
       <div className={cx('header_content')}>
         <div className={cx('container')}>
-          <button onClick={handleClickCreateUser} className={cx('btn btn-primary mt-2 mb-2')}>
-            Create new user
+          <button onClick={handleClickCreateUser} className={cx('btn btn-success mt-2 mr-3 mb-2')}>
+            <FontAwesomeIcon icon={faUserPlus} />
           </button>
+          <Link className={cx('btn btn-primary mt-2 mb-2')} to={configRoutes.routes.role}>
+            Roles
+          </Link>
         </div>
       </div>
       <div className={cx('UserManagementPage_container')}>

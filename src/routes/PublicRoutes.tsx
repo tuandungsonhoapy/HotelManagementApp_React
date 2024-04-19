@@ -3,6 +3,7 @@ import Blog from 'pages/blog'
 import Login from 'pages/Login/Login'
 import HomePage from 'pages/Home'
 import Register from 'pages/Register'
+import RoomDirectory from '../pages/roomDirectory'
 
 //Layouts
 import DefaultLayout from 'layouts/DefaultLayout'
@@ -25,7 +26,8 @@ const publicRoutes: typePublicRoutes = [
   { path: config.routes.blog, component: Blog, layout: DefaultLayout },
   { path: config.routes.login, component: Login, layout: DefaultLayout },
   { path: config.routes.home, component: HomePage, layout: DefaultLayout },
-  { path: config.routes.register, component: Register }
+  { path: config.routes.register, component: Register },
+  { path: config.routes.danhMucPhong, component: RoomDirectory, layout: DefaultLayout }
 ]
 
 const PublicRoutes = () => {

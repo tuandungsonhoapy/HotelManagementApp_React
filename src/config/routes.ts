@@ -14,6 +14,8 @@ interface Routes {
   moiGioi: string
   duAn: string
   forgotPassword: string
+  danhMucPhong: string
+  role: string
 }
 
 const routes: Routes = {
@@ -31,7 +33,9 @@ const routes: Routes = {
   hoiDap: '/hoi-dap',
   moiGioi: 'moi-gioi',
   duAn: '/du-an',
-  forgotPassword: '/forgot-password'
+  forgotPassword: '/forgot-password',
+  danhMucPhong: '/danh-muc-phong',
+  role: '/role'
 }
 
 export default routes

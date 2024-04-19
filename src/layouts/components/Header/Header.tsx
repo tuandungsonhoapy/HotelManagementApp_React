@@ -17,6 +17,8 @@ import { RootState, useAppDispatch } from 'store'
 import configRoutes from '../../../config'
 import { interfaceMenuItem } from 'types/menu.type'
 import { logoutUser } from 'pages/auth.slice'
+import { logoutUserApi } from 'services/authService'
+import { toast } from 'react-toastify'
 
 const cx = classNames.bind(styles)
 
@@ -54,16 +56,17 @@ function Header() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   //handleLogic
-  const handleMenuChange = (menuItem: interfaceMenuItem) => {
+  const handleMenuChange = async (menuItem: interfaceMenuItem) => {
     console.log(menuItem)
     if (menuItem.to === configRoutes.routes.logout) {
-      dispatch(logoutUser())
-      navigate(configRoutes.routes.login)
+      try {
+        await logoutUserApi()
+        dispatch(logoutUser())
+        navigate(configRoutes.routes.home)
+      } catch (error: any) {
+        toast.error(error.message)
+      }
     }
-  }
-
-  const handleClickLogin = () => {
-    navigate(configRoutes.routes.login)
   }
 
   const userMenu = [
@@ -100,11 +103,8 @@ function Header() {
           </Link>
         </div>
         <div className={cx('navbar_menu')}>
-          <Link to={configRoutes.routes.timMua}>Tìm mua</Link>
-          <Link to={configRoutes.routes.timThue}>Tìm thuê</Link>
-          <Link to={configRoutes.routes.giaNhaDat}>Giá nhà đất</Link>
+          <Link to={configRoutes.routes.danhMucPhong}>Danh mục phòng</Link>
           <Link to={configRoutes.routes.hoiDap}>Hỏi đáp</Link>
-          <Link to={configRoutes.routes.moiGioi}>Môi giới</Link>
           <Link to={configRoutes.routes.blog}>Blogs</Link>
           {currentUser.isAuthenticated ? (
             <>

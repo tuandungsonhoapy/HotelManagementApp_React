@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind'
 import { Link, useNavigate } from 'react-router-dom'
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import styles from './Login.module.scss'
 import { toast } from 'react-toastify'
@@ -193,7 +193,7 @@ const Login = () => {
     }
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (authentication.user.isAuthenticated) navigate(configRoutes.routes.home)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

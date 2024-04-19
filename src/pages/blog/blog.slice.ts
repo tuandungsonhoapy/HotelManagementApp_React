@@ -36,7 +36,7 @@ export const addPost = createAsyncThunk('blog/addPost', async (body: Post, thunk
     console.log('response from add blogs: ', response)
     return response.data
   } catch (error: any) {
-    if (error.name === 'AxiosError') return thunkApi.rejectWithValue(error.response.data)
+    if (error.name === 'AxiosError') return thunkApi.rejectWithValue(error)
     throw error
   }
 })
@@ -51,7 +51,7 @@ export const updatePost = createAsyncThunk('blog/updatePost', async (body: Post,
     const response = await http.put<Post>(`posts/${body.id}`, body)
     return response.data
   } catch (error: any) {
-    if (error.name === 'AxiosError') return thunkApi.rejectWithValue(error.response.data)
+    if (error.name === 'AxiosError') return thunkApi.rejectWithValue(error)
     throw error
   }
 })

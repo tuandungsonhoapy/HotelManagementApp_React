@@ -1,8 +1,21 @@
 import axios, { AxiosInstance } from 'axios'
-import { toast } from 'react-toastify'
-import { dataResponse } from 'types/auth.type'
+import { store } from 'store'
 
-const AUTH_TOKEN = ''
+function getCookie(cname: string) {
+  let name = cname + '='
+  let decodedCookie = decodeURIComponent(document.cookie)
+  let ca = decodedCookie.split(';')
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i]
+    while (c.charAt(0) === ' ') {
+      c = c.substring(1)
+    }
+    if (c.indexOf(name) === 0) {
+      return c.substring(name.length, c.length)
+    }
+  }
+  return ''
+}
 
 class Http {
   instance: AxiosInstance
@@ -11,7 +24,11 @@ class Http {
       baseURL: 'http://localhost:8080/api/v1',
       timeout: 10000
     })
-    this.instance.defaults.headers.common['Authorization'] = AUTH_TOKEN
+
+    store.subscribe(() => {
+      this.instance.defaults.headers.common['Authorization'] = `Bearer ${store.getState().auth.user.token}`
+    })
+
     this.instance.defaults.withCredentials = true
 
     // Add a request interceptor
@@ -70,7 +87,7 @@ class Http {
 
           // generic api error (server related) unexpected
           default: {
-            return Promise.reject(error)
+            return Promise.reject(error.response.data)
           }
         }
       }

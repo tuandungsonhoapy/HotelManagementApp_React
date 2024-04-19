@@ -1,0 +1,295 @@
+*,
+*:before,
+*:after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+header,
+footer {
+  height: 100px;
+  text-align: center;
+  background-color: #ffffff;
+}
+
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Open Sans',
+    'Helvetica Neue',
+    sans-serif;
+  background-color: #f2f2f2 !important;
+}
+
+.day_selection {
+  height: 496px;
+  width: 100%;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8)),
+    url('https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2023/4/30/1186690/Thanh-Pho-Da-Lat.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0% 70%;
+  padding: 7% 0;
+}
+
+.day_selection_title_container {
+  text-align: center;
+}
+
+.day_selection_title_row {
+  margin: 0.5%;
+}
+
+.day_selection_title {
+  font-size: 50px;
+  font-weight: 900;
+  color: white;
+}
+
+.day_selection_container {
+  /* margin-top: 2% !important; */
+}
+
+.day_selection_item {
+  margin: 15px;
+  padding: 0 !important;
+  text-align: center;
+}
+
+.day_selection_label {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.day_selection_input {
+  background-color: #ffffff !important;
+  width: 100%;
+  height: 50px;
+  padding: 5px 15px;
+  margin-top: 5px;
+  font-size: 18px;
+  font-weight: 700;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  text-align: start !important;
+}
+
+::-webkit-calendar-picker-indicator {
+  background-color: #ffffff;
+  font-size: 28px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+// .day_selection_info_icon {
+//   font-size: 25px;
+//   margin-top: 7px;
+// }
+
+/* .day_selection_info_sub {
+    font-size: 12px;
+    font-weight: 400;
+} */
+
+.day_selection_info_main {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 34px;
+}
+
+.day_selection_room_collapse {
+  margin-top: 7px;
+}
+
+.day_selection_room_form {
+  background-color: #ffffff;
+  width: 250px;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.day_selection_room_form_row {
+  margin: 10px 0;
+  padding-right: 15px;
+}
+
+.day_selection_room_form_label {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 35px;
+}
+
+input[type='number'] {
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.day_selection_room_form_number {
+  border: solid 2px #aaaaaa;
+  border-radius: 10px;
+  padding: 0 !important;
+  display: inline-flex;
+}
+
+// .grid {
+//   display: grid;
+//   grid-template-rows: repeat(var(--bs-rows, 1), 1fr);
+//   grid-template-columns: repeat(var(--bs-columns, 12), 1fr);
+//   gap: var(--bs-gap, 1.5rem);
+// }
+
+.day_selection_room_form_number,
+.day_selection_room_form_number * {
+  box-sizing: border-box;
+}
+
+.day_selection_room_form_number button {
+  outline: none;
+  -webkit-appearance: none;
+  background-color: transparent;
+  border: none;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  margin: 0;
+  position: relative;
+}
+
+.day_selection_room_form_number button:before,
+.day_selection_room_form_number button:after {
+  display: inline-block;
+  position: absolute;
+  content: '';
+  width: 10px;
+  height: 2px;
+  background-color: #000000;
+  transform: translate(-50%, -50%);
+}
+
+.day_selection_room_form_number button.plus:after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.day_selection_room_form_number input[type='number'] {
+  font-family: sans-serif;
+  padding: 5px;
+  border: solid #aaaaaa;
+  border-width: 0 2px;
+  font-size: 16px;
+  max-width: 40px;
+  height: 2rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.day_selection_room_form_button {
+  background-color: #000000;
+  color: #ffffff;
+  width: 120px;
+  height: 40px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.room_list {
+  margin: auto;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+.room_list_title {
+  font-size: 40px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.room_list_sort_container {
+  padding-right: 12px;
+  justify-content: end;
+  margin-bottom: 1rem;
+}
+
+.room_list_sort_span {
+  line-height: 36px;
+}
+
+.room_list_sort {
+  padding: 0 !important;
+}
+
+.room_list_sort:hover {
+  cursor: pointer !important;
+  color: rgba(0, 0, 0, 0.1);
+}
+
+.room_list_container {
+  display: flex;
+  margin-top: 15px;
+  justify-content: center;
+}
+
+.room_list_item {
+  margin: 15px;
+  height: 200px;
+  float: left;
+  background-color: #ffffff;
+  border: solid 1px #d6d6d6;
+  border-radius: 5px;
+  padding: 0 !important;
+  display: flex;
+}
+
+.room_list_item:hover {
+  cursor: pointer;
+  box-shadow: 0 0 10px #999999;
+}
+
+.room_list_item_img_container {
+  height: 198px;
+  padding: 0 !important;
+}
+
+.room_list_item_img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 5px 0 0 5px;
+}
+
+.room_list_item_detail_container {
+  float: left;
+  margin-left: 1rem;
+  position: relative;
+}
+
+.room_list_item_title {
+  font-size: 25px;
+  font-weight: 650;
+}
+
+.room_list_item_price {
+  font-size: 22px;
+  font-weight: 650;
+  color: #ff0000;
+  position: absolute;
+  bottom: 5px;
+}

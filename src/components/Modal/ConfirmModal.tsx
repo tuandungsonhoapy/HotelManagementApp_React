@@ -27,7 +27,7 @@ function ConfirmModal({
           <Button variant='secondary' onClick={handleCloseModal}>
             Close
           </Button>
-          <Button variant='primary' onClick={handleClickDelete}>
+          <Button variant='danger' onClick={handleClickDelete}>
             {action}
           </Button>
         </Modal.Footer>

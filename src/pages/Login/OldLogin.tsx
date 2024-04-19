@@ -69,7 +69,7 @@ const OldLogin = () => {
           if (response.status === 200 && response.code !== 0) toast.error(response.message)
         })
         .catch((error) => {
-          toast.error(error.response.data.message)
+          toast.error(error.message)
         })
     }
   }

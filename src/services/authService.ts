@@ -9,6 +9,10 @@ const loginUser = (data: interfaceLogin) => {
   return http.post('login', data)
 }
 
+const logoutUserApi = () => {
+  return http.post('logout')
+}
+
 const getUserWithPagination = (currentPage: number, currentLimit: number) => {
   return http.get('users', {
     params: {
@@ -30,4 +34,4 @@ const getUserAccount = () => {
   return http.get('account')
 }
 
-export { registerUser, loginUser, getUserWithPagination, createUser, updateUser, getUserAccount }
+export { registerUser, loginUser, getUserWithPagination, createUser, updateUser, getUserAccount, logoutUserApi }
