@@ -2,8 +2,8 @@ import classNames from 'classnames/bind'
 import styles from './RoleManagement.module.scss'
 import { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faRefresh, faSave, faTrash } from '@fortawesome/free-solid-svg-icons'
-import _, { set } from 'lodash'
+import { faBan, faPencil, faPlus, faRefresh, faSave, faTrash } from '@fortawesome/free-solid-svg-icons'
+import _ from 'lodash'
 import { toast } from 'react-toastify'
 import ConfirmModal from 'components/Modal'
 import { v4 as uuidv4 } from 'uuid'
@@ -17,7 +17,7 @@ interface interfaceFormData {
   description: string
 }
 
-const initialFormData: interfaceFormData[] = [{ id: uuidv4(), url: '', description: '' }]
+const initialFormData: interfaceFormData[] = []
 
 const initialDataModel: interfaceFormData = {
   id: '',
@@ -32,9 +32,33 @@ const RoleManagement = () => {
   const [dataModal, setDataModal] = useState<interfaceFormData>(initialDataModel)
   const [arrErrorInput, setArrErrorInput] = useState<string[]>([])
   const [deleteData, setDeleteData] = useState<interfaceFormData>(initialDataModel)
+  const [updateData, setUpdateData] = useState<interfaceFormData[]>(initialFormData)
+
+  //Hàm cập nhật lại giá trị url trong updateData
+  const updateObjectInArray = (id: string, url: string) => {
+    const newUpdateData = updateData.map((item) => {
+      if (item.id === id) {
+        return { ...item, url }
+      }
+      return item
+    })
+    setUpdateData(newUpdateData)
+  }
+
+  //Hàm cập nhật lại giá trị description trong updateData
+  const updateDescriptionInArray = (id: string, description: string) => {
+    const newUpdateData = updateData.map((item) => {
+      if (item.id === id) {
+        return { ...item, description }
+      }
+      return item
+    })
+    setUpdateData(newUpdateData)
+  }
 
   const handleOnChangeUrl = (index: number, newValue: string, id: string) => {
     const isExist = arrErrorInput.some((errorItem) => errorItem === id)
+    const isExistUpdate = updateData.some((role) => role.id === id)
     let _newState = _.cloneDeep(formData)
     _newState[index].url = newValue
     setFormData(_newState)
@@ -42,12 +66,19 @@ const RoleManagement = () => {
       const _newArrErrorInput = arrErrorInput.filter((item) => item !== id)
       setArrErrorInput(_newArrErrorInput)
     }
+    if (isExistUpdate) {
+      updateObjectInArray(id, newValue)
+    }
   }
 
-  const handleOnChangeDescription = (index: number, newValue: string) => {
+  const handleOnChangeDescription = (index: number, newValue: string, id: string) => {
     let _newState = _.cloneDeep(formData)
     _newState[index].description = newValue
     setFormData(_newState)
+    const isExistUpdate = updateData.some((role) => role.id === id)
+    if (isExistUpdate) {
+      updateDescriptionInArray(id, newValue)
+    }
   }
 
   const HandleClickNewInput = (index: number) => {
@@ -72,6 +103,7 @@ const RoleManagement = () => {
     return typeof value === 'number'
   }
 
+  //Hàm cập nhật lại id cho những role mới thêm vào
   const UpdateIdFormData = (roles: interfaceFormData[]) => {
     console.log('>>>>>>>>>>>>roles:', roles)
     const newFormData = formData.map((item) => {
@@ -82,6 +114,18 @@ const RoleManagement = () => {
       return item
     })
     setFormData(newFormData)
+  }
+
+  //Hàm cập nhật lại id cho những role cần update
+  const UpdateIdFormDataUpdate = (roles: interfaceFormData[]) => {
+    const newFormData = updateData.map((item) => {
+      const role = roles.find((role) => role.url === item.url)
+      if (role) {
+        return role
+      }
+      return item
+    })
+    setUpdateData(newFormData)
   }
 
   const HandleClickDeleteInput = () => {
@@ -105,6 +149,10 @@ const RoleManagement = () => {
       handleDeleteData(deleteData)
     }
     setShowModal(false)
+    const isExistUpdate = updateData.some((role) => role.id === deleteData.id)
+    if (isExistUpdate) {
+      handleRemoveUpdateData(deleteData)
+    }
   }
 
   //Function hiện thông báo yêu cầu xác nhận
@@ -142,6 +190,7 @@ const RoleManagement = () => {
         .then((res: any) => {
           toast.success(res.message)
           UpdateIdFormData(res.data)
+          UpdateIdFormDataUpdate(res.data)
         })
         .catch((err) => {
           console.log('Error:', err)
@@ -160,6 +209,17 @@ const RoleManagement = () => {
       }
     })
     return data
+  }
+
+  const handleAddUpdateData = (role: interfaceFormData) => {
+    const newUpdateData = updateData.filter((item) => item.id !== role.id)
+    newUpdateData.push(role)
+    setUpdateData(newUpdateData)
+  }
+
+  const handleRemoveUpdateData = (role: interfaceFormData) => {
+    const newUpdateData = updateData.filter((item) => item.id !== role.id)
+    setUpdateData(newUpdateData)
   }
 
   const renderInputForm = () => {
@@ -182,16 +242,29 @@ const RoleManagement = () => {
             className={cx('form-control')}
             type='text'
             value={item.description}
-            onChange={(e) => handleOnChangeDescription(index, e.target.value)}
+            onChange={(e) => handleOnChangeDescription(index, e.target.value, item.id)}
           />
         </div>
         <div className={cx('div-group', 'col-sm-3', 'form-group')}>
           <button onClick={() => HandleClickNewInput(index)} className={cx('btn', 'btn-success', 'mr-3')}>
             <FontAwesomeIcon icon={faPlus} />
           </button>
-          <button onClick={() => handleShowModal(item)} className={cx('btn', 'btn-danger')}>
+          <button onClick={() => handleShowModal(item)} className={cx('btn', 'btn-danger', 'mr-3')}>
             <FontAwesomeIcon icon={faTrash} />
           </button>
+          {updateData.some((role) => role.id === item.id) ? (
+            <>
+              <button onClick={() => handleRemoveUpdateData(item)} className={cx('btn', 'btn-warning')}>
+                <FontAwesomeIcon icon={faBan} />
+              </button>
+            </>
+          ) : (
+            <>
+              <button onClick={() => handleAddUpdateData(item)} className={cx('btn', 'btn-warning')}>
+                <FontAwesomeIcon icon={faPencil} />
+              </button>
+            </>
+          )}
         </div>
       </div>
     ))
@@ -212,6 +285,26 @@ const RoleManagement = () => {
     fetchData()
   }, [])
 
+  const handleRefresh = () => {
+    setUpdateData([])
+    fetchData()
+  }
+
+  const handleUpdateData = () => {
+    if (updateData.length > 0) {
+      http
+        .put('role/update', updateData)
+        .then((res: any) => {
+          toast.success(res.message)
+          setUpdateData([])
+        })
+        .catch((err) => {
+          console.log('Error:', err.message)
+          toast.error('Cập nhật role thất bại!')
+        })
+    }
+  }
+
   return (
     <>
       <div className={cx('container', 'RoleManagement_container')}>
@@ -231,9 +324,14 @@ const RoleManagement = () => {
               <button className={cx('btn', 'btn-primary', 'mt-2', 'mr-4')} onClick={() => handleClickSave()}>
                 <FontAwesomeIcon icon={faSave} />
               </button>
-              <button className={cx('btn', 'btn-primary', 'mt-2')} onClick={() => fetchData()}>
+              <button className={cx('btn', 'btn-primary', 'mt-2', 'mr-4')} onClick={handleRefresh}>
                 <FontAwesomeIcon icon={faRefresh} />
               </button>
+              {updateData.length > 0 && (
+                <button className={cx('btn', 'btn-primary', 'mt-2')} onClick={handleUpdateData}>
+                  <FontAwesomeIcon icon={faPencil} />
+                </button>
+              )}
             </div>
           </div>
         </div>
