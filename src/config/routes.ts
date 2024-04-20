@@ -14,6 +14,8 @@ interface Routes {
   moiGioi: string
   duAn: string
   forgotPassword: string
+  customerinformation: string
+  paymentinformation:string
 }
 
 const routes: Routes = {
@@ -21,9 +23,9 @@ const routes: Routes = {
   login: '/login',
   home: '/',
   register: '/register',
-  logout: '/logout',
+  logout:  '/logout',
   settings: '/settings',
-  viewprofile: '/viewprofile',
+  viewprofile: '/viewprofile', 
   user: '/user',
   timMua: '/tim-mua',
   timThue: '/tim-thue',
@@ -31,7 +33,9 @@ const routes: Routes = {
   hoiDap: '/hoi-dap',
   moiGioi: 'moi-gioi',
   duAn: '/du-an',
-  forgotPassword: '/forgot-password'
+  forgotPassword: '/forgot-password',
+  customerinformation:'/customer-information',
+  paymentinformation:'/payment-information'
 }
-
+    
 export default routes
