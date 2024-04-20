@@ -1,5 +1,6 @@
 //Pages
 import UserManagementPage from 'pages/UserManagement'
+import RoleManagement from 'pages/RoleManagement'
 
 //Layouts
 import DefaultLayout from 'layouts/DefaultLayout'
@@ -22,7 +23,8 @@ interface privateRoute {
 type typePrivateRoutes = privateRoute[]
 
 const privateRoutes: typePrivateRoutes = [
-  { path: config.routes.user, component: UserManagementPage, layout: DefaultLayout }
+  { path: config.routes.user, component: UserManagementPage, layout: DefaultLayout },
+  { path: config.routes.role, component: RoleManagement, layout: DefaultLayout }
 ]
 
 const PrivateRoutes = () => {

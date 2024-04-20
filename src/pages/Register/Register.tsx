@@ -93,7 +93,7 @@
 //           }
 //         })
 //         .catch((error: any) => {
-//           const data: dataResponse = error.response.data
+//           const data: dataResponse = error
 //           toast.error(data.message)
 //         })
 //     }

@@ -14,6 +14,8 @@ interface Routes {
   moiGioi: string
   duAn: string
   forgotPassword: string
+  danhMucPhong: string
+  role: string
   customerinformation: string
   paymentinformation:string
 }
@@ -33,6 +35,9 @@ const routes: Routes = {
   hoiDap: '/hoi-dap',
   moiGioi: 'moi-gioi',
   duAn: '/du-an',
+  forgotPassword: '/forgot-password',
+  danhMucPhong: '/danh-muc-phong',
+  role: '/role'
   forgotPassword: '/forgot-password',
   customerinformation:'/customer-information',
   paymentinformation:'/payment-information'

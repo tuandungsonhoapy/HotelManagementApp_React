@@ -25,6 +25,14 @@ interface AuthState {
   pageLoading: any
 }
 
+const initialUser: interfaceUserLogin = {
+  isAuthenticated: false,
+  token: '',
+  username: '',
+  avatar: '',
+  groupWithRoles: {}
+}
+
 const initalState: AuthState = {
   user: {
     isAuthenticated: false,
@@ -59,7 +67,7 @@ export const register = createAsyncThunk<any, interfaceRegister>(
       const response = await http.post<dataResponse>('register', body)
       return response
     } catch (error: any) {
-      if (error.name === 'AxiosError') return thunkApi.rejectWithValue(error.response.data)
+      if (error.name === 'AxiosError') return thunkApi.rejectWithValue(error)
       throw error
     }
   }
@@ -70,7 +78,7 @@ export const login = createAsyncThunk('auth/login', async (body: interfaceLogin,
     const response = await http.post<any>('login', body)
     return response
   } catch (error: any) {
-    if (error.name === 'AxiosError') return thunkApi.rejectWithValue(error.response.data)
+    if (error.name === 'AxiosError') return thunkApi.rejectWithValue(error)
     throw error
   }
 })
@@ -84,8 +92,7 @@ export const authSlice = createSlice({
       state.user.token = action.payload || null
     },
     logoutUser: (state) => {
-      state.user.isAuthenticated = false
-      state.user.token = null
+      state.user = initialUser
     },
     setDefaultFormLogin: (state) => {
       state.loginInfo = defaultFormLogin
