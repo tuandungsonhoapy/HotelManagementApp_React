@@ -8,6 +8,7 @@ import { toast } from 'react-toastify'
 import ConfirmModal from 'components/Modal'
 import { v4 as uuidv4 } from 'uuid'
 import http from 'Utils/httpRequest'
+import { useDebounce } from 'hooks'
 
 const cx = classNames.bind(styles)
 
@@ -25,14 +26,18 @@ const initialDataModel: interfaceFormData = {
   description: ''
 }
 
+const RoleConstant = ['/roles', '/role/create', '/role/update', '/role/delete', '/role/search']
+
 const RoleManagement = () => {
   console.log('rerender-RoleManagement!')
   const [formData, setFormData] = useState<interfaceFormData[]>(initialFormData)
   const [showModal, setShowModal] = useState<boolean>(false)
-  const [dataModal, setDataModal] = useState<interfaceFormData>(initialDataModel)
   const [arrErrorInput, setArrErrorInput] = useState<string[]>([])
   const [deleteData, setDeleteData] = useState<interfaceFormData>(initialDataModel)
   const [updateData, setUpdateData] = useState<interfaceFormData[]>(initialFormData)
+  const [searchData, setSearchData] = useState<string>('')
+
+  const debouncedValue = useDebounce(searchData, 700)
 
   //Hàm cập nhật lại giá trị url trong updateData
   const updateObjectInArray = (id: string, url: string) => {
@@ -157,6 +162,10 @@ const RoleManagement = () => {
 
   //Function hiện thông báo yêu cầu xác nhận
   const handleShowModal = (role: interfaceFormData) => {
+    if (RoleConstant.some((item) => item === role.url)) {
+      toast.error('Không thể xóa role này!')
+      return
+    }
     setShowModal(true)
     setDeleteData(role)
   }
@@ -212,6 +221,10 @@ const RoleManagement = () => {
   }
 
   const handleAddUpdateData = (role: interfaceFormData) => {
+    if (RoleConstant.some((item) => item === role.url)) {
+      toast.error('Không thể cập nhật role này!')
+      return
+    }
     const newUpdateData = updateData.filter((item) => item.id !== role.id)
     newUpdateData.push(role)
     setUpdateData(newUpdateData)
@@ -221,6 +234,28 @@ const RoleManagement = () => {
     const newUpdateData = updateData.filter((item) => item.id !== role.id)
     setUpdateData(newUpdateData)
   }
+
+  useEffect(() => {
+    if (!debouncedValue.trim()) {
+      fetchData()
+      return
+    }
+    if (debouncedValue) {
+      http
+        .get(`role/search`, {
+          params: {
+            search: debouncedValue
+          }
+        })
+        .then((res) => {
+          setFormData(res.data)
+          setUpdateData([])
+        })
+        .catch((err) => {
+          console.log('Error:', err.message)
+        })
+    }
+  }, [debouncedValue])
 
   const renderInputForm = () => {
     return formData.map((item, index) => (
@@ -287,10 +322,16 @@ const RoleManagement = () => {
 
   const handleRefresh = () => {
     setUpdateData([])
+    setArrErrorInput([])
     fetchData()
   }
 
   const handleUpdateData = () => {
+    const check = Validation_FormData()
+    if (!check) {
+      toast.error('Vui lòng nhập URL!')
+      return
+    }
     if (updateData.length > 0) {
       http
         .put('role/update', updateData)
@@ -310,14 +351,25 @@ const RoleManagement = () => {
       <div className={cx('container', 'RoleManagement_container')}>
         <div className={cx('header_container')}>
           <div className={cx('create_form')}>
-            <div className={cx('d-flex', 'mb-3', 'align-items-center')}>
-              <h5>Thêm mới role:</h5>
-              <button
-                onClick={() => HandleClickNewInput(formData.length - 1)}
-                className={cx('btn', 'btn-success', 'mr-3', 'ml-3')}
-              >
-                <FontAwesomeIcon icon={faPlus} />
-              </button>
+            <div className={cx('header_create_form', 'd-flex', 'justify-content-between')}>
+              <div className={cx('d-flex', 'mb-3', 'align-items-center')}>
+                <h5>Thêm mới role:</h5>
+                <button
+                  onClick={() => HandleClickNewInput(formData.length - 1)}
+                  className={cx('btn', 'btn-success', 'mr-3', 'ml-3')}
+                >
+                  <FontAwesomeIcon icon={faPlus} />
+                </button>
+              </div>
+              <div className={cx('d-flex', 'align-items-center', 'mb-4', 'mr-44')}>
+                <span>Search: </span>
+                <input
+                  className={cx('form-control', 'input_search', 'ml-2')}
+                  type='text'
+                  value={searchData}
+                  onChange={(e) => setSearchData(e.target.value)}
+                />
+              </div>
             </div>
             <div className={cx('input_form_container')}>{renderInputForm()}</div>
             <div>
@@ -338,7 +390,7 @@ const RoleManagement = () => {
       </div>
       <ConfirmModal
         title='Confirm delete!'
-        notification={`Bạn có chắc chắn muốn xóa role: ${dataModal.url}!`}
+        notification={`Bạn có chắc chắn muốn xóa role: ${deleteData.url}`}
         action='Delete'
         show={showModal}
         handleCloseModal={handleCloseModal}

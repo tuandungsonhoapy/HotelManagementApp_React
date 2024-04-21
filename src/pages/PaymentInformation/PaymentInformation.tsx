@@ -1,18 +1,13 @@
-
 import './PaymentInformation.css'
 import configRoutes from '../../config'
 import { Link } from 'react-router-dom'
-
 
 function PaymentInformation(props: any) {
   return (
     <div className='main-container'>
       <div className='rectangle'>
         <div className='flex-row-cd'>
-          <img className='logo'
-            src='https://mogi.vn/content/Images/logo.svg'
-            alt='mogi'
-          /> 
+          <img className='logo' src='https://mogi.vn/content/Images/logo.svg' alt='mogi' />
           <div className='ellipse' />
           <button className='ellipse-5' />
           <div className='ellipse-6' />
@@ -21,16 +16,16 @@ function PaymentInformation(props: any) {
           <span className='vector-7'>v</span>
 
           <div className='vector-7' />
-          
+
           <div className='rectangle-8' />
-          <div className='rectangle-9' />    
+          <div className='rectangle-9' />
         </div>
         <div className='flex-row'>
           <span className='customer-info'>Thông tin khách hàng</span>
           <span className='payment-details'>Chi tiết thanh toán</span>
           <span className='confirmed-booking'>Đã xác nhận đặt phòng!</span>
         </div>
-      </div> 
+      </div>
       <div className='rectangle-a'>
         <div className='rectangle-b'>
           <button className='image-btn' />
@@ -42,24 +37,18 @@ function PaymentInformation(props: any) {
           <div className='group' />
         </div>
         <div className='select-payment-method'>
-          <span className='select-payment-method-f'>
-            Select payment method
-          </span>
+          <span className='select-payment-method-f'>Select payment method</span>
           <span className='asterisk'>*</span>
         </div>
         <div className='rectangle-10' />
-        <span className='last-step-almost-done'>
-          Last step! You're almost done.
-        </span>
+        <span className='last-step-almost-done'>Last step! You're almost done.</span>
         <div className='card-holder-name'>
           <span className='card-holder-name-11'>Card holder name </span>
           <span className='asterisk-12'>*</span>
         </div>
         <div className='rectangle-13' />
         <div className='credit-debit-card-number'>
-          <span className='credit-debit-card-number-14'>
-            Credit/debit card number 
-          </span>
+          <span className='credit-debit-card-number-14'>Credit/debit card number </span>
           <span className='asterisk-15'>*</span>
         </div>
         <div className='rectangle-16' />
@@ -83,9 +72,7 @@ function PaymentInformation(props: any) {
       </div>
       <div className='rectangle-1e'>
         <div className='proceed-agree-terms'>
-          <span className='proceed-agree-agoda'>
-            By proceeding with this booking, I agree to Agoda’s
-          </span>
+          <span className='proceed-agree-agoda'>By proceeding with this booking, I agree to Agoda’s</span>
           <span className='empty'> </span>
           <span className='terms-of-use'>Terms of Use</span>
           <span className='empty-1f'> </span>
@@ -99,7 +86,7 @@ function PaymentInformation(props: any) {
         </div>
       </div>
     </div>
-  ); 
+  )
 }
 
 export default PaymentInformation

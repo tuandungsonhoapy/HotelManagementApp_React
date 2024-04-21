@@ -17,7 +17,7 @@ interface Routes {
   danhMucPhong: string
   role: string
   customerinformation: string
-  paymentinformation:string
+  paymentinformation: string
 }
 
 const routes: Routes = {
@@ -25,9 +25,9 @@ const routes: Routes = {
   login: '/login',
   home: '/',
   register: '/register',
-  logout:  '/logout',
+  logout: '/logout',
   settings: '/settings',
-  viewprofile: '/viewprofile', 
+  viewprofile: '/viewprofile',
   user: '/user',
   timMua: '/tim-mua',
   timThue: '/tim-thue',
@@ -37,10 +37,9 @@ const routes: Routes = {
   duAn: '/du-an',
   forgotPassword: '/forgot-password',
   danhMucPhong: '/danh-muc-phong',
-  role: '/role'
-  forgotPassword: '/forgot-password',
-  customerinformation:'/customer-information',
-  paymentinformation:'/payment-information'
+  role: '/role',
+  customerinformation: '/customer-information',
+  paymentinformation: '/payment-information'
 }
-    
+
 export default routes
