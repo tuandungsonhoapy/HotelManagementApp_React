@@ -22,6 +22,16 @@ const getUserWithPagination = (currentPage: number, currentLimit: number) => {
   })
 }
 
+const searchUser = (currentPage: number, currentLimit: number, search: string) => {
+  return http.get('user/search', {
+    params: {
+      page: currentPage,
+      limit: currentLimit,
+      search
+    }
+  })
+}
+
 const createUser = (data: interfaceRegister) => {
   return http.post('user/create', data)
 }
@@ -34,4 +44,13 @@ const getUserAccount = () => {
   return http.get('account')
 }
 
-export { registerUser, loginUser, getUserWithPagination, createUser, updateUser, getUserAccount, logoutUserApi }
+export {
+  registerUser,
+  loginUser,
+  getUserWithPagination,
+  createUser,
+  updateUser,
+  getUserAccount,
+  logoutUserApi,
+  searchUser
+}

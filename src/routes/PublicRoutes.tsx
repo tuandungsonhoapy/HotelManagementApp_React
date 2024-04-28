@@ -9,13 +9,13 @@ import PaymentInformation from 'pages/PaymentInformation'
 import CustomerInformation from 'pages/CustomerInformation'
 //Layouts
 import DefaultLayout from 'layouts/DefaultLayout'
+import SemiLayout from 'layouts/SemiLayout'
 
 //routesConfig
 import config from '../config'
 import { Fragment } from 'react/jsx-runtime'
 import { Route, Routes } from 'react-router-dom'
 import { DefaultLayoutProps } from 'interfaces/layout.interface'
-import SemiLayout from 'layouts/SemiLayout'
 
 interface publicRoute {
   path: string
@@ -31,11 +31,10 @@ const publicRoutes: typePublicRoutes = [
   { path: config.routes.home, component: HomePage, layout: DefaultLayout },
   { path: config.routes.register, component: Register },
   { path: config.routes.danhMucPhong, component: RoomDirectory, layout: DefaultLayout },
-  { path: config.routes.register, component: Register },
-  { path: config.routes.customerinformation, component: CustomerInformation, layout: SemiLayout}, 
-  { path: config.routes.paymentinformation, component: PaymentInformation, layout: SemiLayout}
-] 
- 
+  { path: config.routes.customerinformation, component: CustomerInformation, layout: SemiLayout },
+  { path: config.routes.paymentinformation, component: PaymentInformation, layout: SemiLayout }
+]
+
 const PublicRoutes = () => {
   return (
     <Routes>

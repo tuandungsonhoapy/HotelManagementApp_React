@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind'
 
-import styles from './UserManagementPage.module.scss'
+import styles from './RoomManagement.module.scss'
 import { useEffect, useState } from 'react'
 import Image from 'components/Image'
 import http from 'Utils/httpRequest'
@@ -51,7 +51,7 @@ interface interfaceUser {
 
 const cx = classNames.bind(styles)
 
-const UserManagementPage = () => {
+const RoomManagement = () => {
   const [usersList, setUsersList] = useState<interfaceUser[]>([])
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [currentLimit, setCurrentLimit] = useState<number>(10)
@@ -270,8 +270,8 @@ const UserManagementPage = () => {
           <button onClick={handleClickCreateUser} className={cx('btn btn-success mt-2 mr-3 mb-2')}>
             <FontAwesomeIcon icon={faUserPlus} />
           </button>
-          <Link className={cx('btn btn-primary mt-2 mb-2')} to={configRoutes.routes.role}>
-            Roles
+          <Link className={cx('btn btn-primary mt-2 mb-2')} to={configRoutes.routes.roomCategory}>
+            Room Category
           </Link>
         </div>
         <div className={cx('d-flex', 'align-items-center', 'mr-4')}>
@@ -346,4 +346,4 @@ const UserManagementPage = () => {
   )
 }
 
-export default UserManagementPage
+export default RoomManagement

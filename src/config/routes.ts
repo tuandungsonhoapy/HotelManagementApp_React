@@ -18,6 +18,9 @@ interface Routes {
   role: string
   customerinformation: string
   paymentinformation: string
+  roomManagement: string
+  roomCategory: string
+  groupRole: string
 }
 
 const routes: Routes = {
@@ -39,7 +42,10 @@ const routes: Routes = {
   danhMucPhong: '/danh-muc-phong',
   role: '/role',
   customerinformation: '/customer-information',
-  paymentinformation: '/payment-information'
+  paymentinformation: '/payment-information',
+  roomManagement: '/room-management',
+  roomCategory: '/room-category',
+  groupRole: '/group-role'
 }
 
 export default routes

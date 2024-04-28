@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind'
-import styles from './RoleManagement.module.scss'
+import styles from './RoomCategory.module.scss'
 import { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faBan, faPencil, faPlus, faRefresh, faSave, faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -10,13 +10,12 @@ import { v4 as uuidv4 } from 'uuid'
 import http from 'Utils/httpRequest'
 import { useDebounce } from 'hooks'
 import { useNavigate } from 'react-router-dom'
-import routes from 'config/routes'
 
 const cx = classNames.bind(styles)
 
 interface interfaceFormData {
   id: string
-  url: string
+  roomName: string
   description: string
 }
 
@@ -24,13 +23,13 @@ const initialFormData: interfaceFormData[] = []
 
 const initialDataModel: interfaceFormData = {
   id: '',
-  url: '',
+  roomName: '',
   description: ''
 }
 
-const RoleConstant = ['/roles', '/role/create', '/role/update', '/role/delete', '/role/search', '/role/assign-role']
+const RoleConstant = ['/roles', '/role/create', '/role/update', '/role/delete', '/role/search']
 
-const RoleManagement = () => {
+const RoomCategory = () => {
   console.log('rerender-RoleManagement!')
   const [formData, setFormData] = useState<interfaceFormData[]>(initialFormData)
   const [showModal, setShowModal] = useState<boolean>(false)
@@ -43,11 +42,11 @@ const RoleManagement = () => {
 
   const debouncedValue = useDebounce(searchData, 700)
 
-  //Hàm cập nhật lại giá trị url trong updateData
-  const updateObjectInArray = (id: string, url: string) => {
+  //Hàm cập nhật lại giá trị roomName trong updateData
+  const updateObjectInArray = (id: string, roomName: string) => {
     const newUpdateData = updateData.map((item) => {
       if (item.id === id) {
-        return { ...item, url }
+        return { ...item, roomName }
       }
       return item
     })
@@ -69,7 +68,7 @@ const RoleManagement = () => {
     const isExist = arrErrorInput.some((errorItem) => errorItem === id)
     const isExistUpdate = updateData.some((role) => role.id === id)
     let _newState = _.cloneDeep(formData)
-    _newState[index].url = newValue
+    _newState[index].roomName = newValue
     setFormData(_newState)
     if (isExist) {
       const _newArrErrorInput = arrErrorInput.filter((item) => item !== id)
@@ -94,7 +93,7 @@ const RoleManagement = () => {
     let _newState = _.cloneDeep(formData)
     const value: interfaceFormData = {
       id: uuidv4(),
-      url: '',
+      roomName: '',
       description: ''
     }
     _newState.splice(index + 1, 0, value)
@@ -116,7 +115,7 @@ const RoleManagement = () => {
   const UpdateIdFormData = (roles: interfaceFormData[]) => {
     console.log('>>>>>>>>>>>>roles:', roles)
     const newFormData = formData.map((item) => {
-      const role = roles.find((role) => role.url === item.url)
+      const role = roles.find((role) => role.roomName === item.roomName)
       if (role) {
         return role
       }
@@ -128,7 +127,7 @@ const RoleManagement = () => {
   //Hàm cập nhật lại id cho những role cần update
   const UpdateIdFormDataUpdate = (roles: interfaceFormData[]) => {
     const newFormData = updateData.map((item) => {
-      const role = roles.find((role) => role.url === item.url)
+      const role = roles.find((role) => role.roomName === item.roomName)
       if (role) {
         return role
       }
@@ -166,7 +165,7 @@ const RoleManagement = () => {
 
   //Function hiện thông báo yêu cầu xác nhận
   const handleShowModal = (role: interfaceFormData) => {
-    if (RoleConstant.some((item) => item === role.url)) {
+    if (RoleConstant.some((item) => item === role.roomName)) {
       toast.error('Không thể xóa role này!')
       return
     }
@@ -185,7 +184,7 @@ const RoleManagement = () => {
     setArrErrorInput(initial)
     let _newState = _.cloneDeep(initial)
     formData.map((item, index) => {
-      if (!item.url) {
+      if (!item.roomName) {
         _newState.push(item.id)
         setArrErrorInput(_newState)
         check = false
@@ -217,7 +216,7 @@ const RoleManagement = () => {
   const buildData = () => {
     const data = formData.map((item) => {
       return {
-        url: item.url,
+        roomName: item.roomName,
         description: item.description
       }
     })
@@ -225,7 +224,7 @@ const RoleManagement = () => {
   }
 
   const handleAddUpdateData = (role: interfaceFormData) => {
-    if (RoleConstant.some((item) => item === role.url)) {
+    if (RoleConstant.some((item) => item === role.roomName)) {
       toast.error('Không thể cập nhật role này!')
       return
     }
@@ -271,7 +270,7 @@ const RoleManagement = () => {
               'is-invalid': arrErrorInput.some((errorItem) => errorItem === item.id)
             })}
             type='text'
-            value={item.url}
+            value={item.roomName}
             onChange={(e) => handleOnChangeUrl(index, e.target.value, item.id)}
           />
         </div>
@@ -352,18 +351,15 @@ const RoleManagement = () => {
 
   return (
     <>
-      <div className={cx('container', 'RoleManagement_container')}>
-        <button className={cx('btn', 'btn-primary', 'mr-3')} onClick={() => navigation(-1)}>
+      <div className={cx('container', 'RoomCategory_container')}>
+        <button className={cx('btn', 'btn-primary')} onClick={() => navigation(-1)}>
           <FontAwesomeIcon icon={faArrowLeft} />
-        </button>
-        <button className={cx('btn', 'btn-primary')} onClick={() => navigation(routes.groupRole)}>
-          Gán quyền
         </button>
         <div className={cx('header_container')}>
           <div className={cx('create_form')}>
             <div className={cx('header_create_form', 'd-flex', 'justify-content-between')}>
               <div className={cx('d-flex', 'mb-3', 'align-items-center')}>
-                <h5>Thêm mới role:</h5>
+                <h5>Thêm mới loại phòng:</h5>
                 <button
                   onClick={() => HandleClickNewInput(formData.length - 1)}
                   className={cx('btn', 'btn-success', 'mr-3', 'ml-3')}
@@ -400,7 +396,7 @@ const RoleManagement = () => {
       </div>
       <ConfirmModal
         title='Confirm delete!'
-        notification={`Bạn có chắc chắn muốn xóa role: ${deleteData.url}`}
+        notification={`Bạn có chắc chắn muốn xóa role: ${deleteData.roomName}`}
         action='Delete'
         show={showModal}
         handleCloseModal={handleCloseModal}
@@ -410,4 +406,4 @@ const RoleManagement = () => {
   )
 }
 
-export default RoleManagement
+export default RoomCategory
