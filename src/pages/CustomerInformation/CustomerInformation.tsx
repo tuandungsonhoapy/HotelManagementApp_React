@@ -33,25 +33,28 @@ function CustomerInformation(props: any) {
           <span className='required'>*</span>
         </div>
         <input type='text' className='rectangle-d' />
+        
         <div className='email-input'>
           <span className='email-label'>Email</span>
           <span className='empty-space'> </span>
           <span className='required-sign'>*</span>
         </div>
-        <input type='text' className='rectangle-e' />
+        <input type='text' className='rectangle-n' />
         <span className='reminder-text'>
           Nếu quý khách nhập địa chỉ thư điện tử và không hoàn thành việc đặt phòng thì chúng tôi có thể nhắc nhở để
           giúp quý khách tiếp tục đặt phòng.
         </span>
         <div className='flex-row-f'>
-          <span className='phone-input'>Số điện thoại (không bắt buộc)</span>
           <div className='country-input'>
-            <span className='country-label'>Quốc gia cư trú </span>
+          <span className='phone-input'>Số điện thoại (không bắt buộc)</span>
+          </div>
+          <div className='country-input'>
+            <span className='country-label'>Quốc gia cư trú</span>
             <span className='required-sign-10'>*</span>
           </div>
         </div>
         <div className='flex-row-11'>
-          <input type='number' className='rectangle-12' />
+          <input type='text' className='rectangle-12' />
           <input type='text' className='rectangle-13' />
         </div>
         <span className='cung-cap'>
@@ -60,12 +63,10 @@ function CustomerInformation(props: any) {
         </span>
         <div className='rectangle-14'>
           <span className='hut-thuoc'>Quy định hút thuốc (nếu có phòng):</span>
-          <div className='frame'>
-            <div className='group-15'>
+            
               <input type='checkbox' className='rectangle-16' />
-            </div>
+            
             <span className='phong-hut-thuoc'>Phòng hút thuốc</span>
-          </div>
           <span className='chon-loai-giuong'>Chọn loại giường (nếu có phòng):</span>
           <div className='frame-17'>
             <div className='group-18'>
