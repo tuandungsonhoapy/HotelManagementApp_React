@@ -21,6 +21,8 @@ interface Routes {
   roomManagement: string
   roomCategory: string
   groupRole: string
+  booking: string
+  paymentInvoice: string
 }
 
 const routes: Routes = {
@@ -45,7 +47,9 @@ const routes: Routes = {
   paymentinformation: '/payment-information',
   roomManagement: '/room-management',
   roomCategory: '/room-category',
-  groupRole: '/group-role'
+  groupRole: '/group-role',
+  booking: '/booking',
+  paymentInvoice: '/payment-invoice'
 }
 
 export default routes

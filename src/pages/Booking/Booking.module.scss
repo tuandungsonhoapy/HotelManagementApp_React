@@ -1,0 +1,36 @@
+.booking_container {
+  margin-top: 66px;
+
+  h3 {
+    font-weight: 700;
+  }
+
+  img {
+    height: 300px;
+    width: 500px;
+  }
+
+  p {
+    font-size: 20px;
+    font-weight: 500;
+    margin-top: 20px;
+  }
+
+  .form_checkin {
+    height: 28px;
+    border-radius: 8px;
+    width: 320px;
+    border: black 1px solid;
+  }
+
+  .form_checkout {
+    height: 28px;
+    border-radius: 8px;
+    width: 320px;
+    border: black 1px solid;
+  }
+
+  .btn_container {
+    margin-top: 20px;
+  }
+}

@@ -33,7 +33,7 @@ function CustomerInformation(props: any) {
           <span className='required'>*</span>
         </div>
         <input type='text' className='rectangle-d' />
-        
+
         <div className='email-input'>
           <span className='email-label'>Email</span>
           <span className='empty-space'> </span>
@@ -46,7 +46,7 @@ function CustomerInformation(props: any) {
         </span>
         <div className='flex-row-f'>
           <div className='country-input'>
-          <span className='phone-input'>Số điện thoại (không bắt buộc)</span>
+            <span className='phone-input'>Số điện thoại (không bắt buộc)</span>
           </div>
           <div className='country-input'>
             <span className='country-label'>Quốc gia cư trú</span>
@@ -63,10 +63,10 @@ function CustomerInformation(props: any) {
         </span>
         <div className='rectangle-14'>
           <span className='hut-thuoc'>Quy định hút thuốc (nếu có phòng):</span>
-            
-              <input type='checkbox' className='rectangle-16' />
-            
-            <span className='phong-hut-thuoc'>Phòng hút thuốc</span>
+
+          <input type='checkbox' className='rectangle-16' />
+
+          <span className='phong-hut-thuoc'>Phòng hút thuốc</span>
           <span className='chon-loai-giuong'>Chọn loại giường (nếu có phòng):</span>
           <div className='frame-17'>
             <div className='group-18'>

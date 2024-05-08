@@ -2,11 +2,15 @@ import { configureStore } from '@reduxjs/toolkit'
 import blogReducer from 'pages/blog/blog.slice'
 import { useDispatch } from 'react-redux'
 import authReducer from 'pages/auth.slice'
+import roomReducer from 'pages/RoomManagement/room.slice'
+import bookingReducer from 'pages/booking.slice'
 
 export const store = configureStore({
   reducer: {
     blog: blogReducer,
-    auth: authReducer
+    auth: authReducer,
+    room: roomReducer,
+    booking: bookingReducer
   }
 })
 

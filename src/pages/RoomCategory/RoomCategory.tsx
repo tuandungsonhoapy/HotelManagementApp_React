@@ -15,7 +15,7 @@ const cx = classNames.bind(styles)
 
 interface interfaceFormData {
   id: string
-  roomName: string
+  categoryName: string
   description: string
 }
 
@@ -23,11 +23,11 @@ const initialFormData: interfaceFormData[] = []
 
 const initialDataModel: interfaceFormData = {
   id: '',
-  roomName: '',
+  categoryName: '',
   description: ''
 }
 
-const RoleConstant = ['/roles', '/role/create', '/role/update', '/role/delete', '/role/search']
+const RoleConstant: any[] = []
 
 const RoomCategory = () => {
   console.log('rerender-RoleManagement!')
@@ -42,11 +42,11 @@ const RoomCategory = () => {
 
   const debouncedValue = useDebounce(searchData, 700)
 
-  //Hàm cập nhật lại giá trị roomName trong updateData
-  const updateObjectInArray = (id: string, roomName: string) => {
+  //Hàm cập nhật lại giá trị categoryName trong updateData
+  const updateObjectInArray = (id: string, categoryName: string) => {
     const newUpdateData = updateData.map((item) => {
       if (item.id === id) {
-        return { ...item, roomName }
+        return { ...item, categoryName }
       }
       return item
     })
@@ -66,9 +66,9 @@ const RoomCategory = () => {
 
   const handleOnChangeUrl = (index: number, newValue: string, id: string) => {
     const isExist = arrErrorInput.some((errorItem) => errorItem === id)
-    const isExistUpdate = updateData.some((role) => role.id === id)
+    const isExistUpdate = updateData.some((category) => category.id === id)
     let _newState = _.cloneDeep(formData)
-    _newState[index].roomName = newValue
+    _newState[index].categoryName = newValue
     setFormData(_newState)
     if (isExist) {
       const _newArrErrorInput = arrErrorInput.filter((item) => item !== id)
@@ -83,7 +83,7 @@ const RoomCategory = () => {
     let _newState = _.cloneDeep(formData)
     _newState[index].description = newValue
     setFormData(_newState)
-    const isExistUpdate = updateData.some((role) => role.id === id)
+    const isExistUpdate = updateData.some((category) => category.id === id)
     if (isExistUpdate) {
       updateDescriptionInArray(id, newValue)
     }
@@ -93,16 +93,16 @@ const RoomCategory = () => {
     let _newState = _.cloneDeep(formData)
     const value: interfaceFormData = {
       id: uuidv4(),
-      roomName: '',
+      categoryName: '',
       description: ''
     }
     _newState.splice(index + 1, 0, value)
     setFormData(_newState)
   }
 
-  const handleDeleteData = (role: interfaceFormData) => {
-    console.log('role:', role)
-    const newFormData = formData.filter((item) => item.id !== role.id)
+  const handleDeleteData = (category: interfaceFormData) => {
+    console.log('category:', category)
+    const newFormData = formData.filter((item) => item.id !== category.id)
     console.log('newFormData:', newFormData)
     setFormData(newFormData)
   }
@@ -111,25 +111,25 @@ const RoomCategory = () => {
     return typeof value === 'number'
   }
 
-  //Hàm cập nhật lại id cho những role mới thêm vào
-  const UpdateIdFormData = (roles: interfaceFormData[]) => {
-    console.log('>>>>>>>>>>>>roles:', roles)
+  //Hàm cập nhật lại id cho những category mới thêm vào
+  const UpdateIdFormData = (categories: interfaceFormData[]) => {
+    console.log('>>>>>>>>>>>>categories:', categories)
     const newFormData = formData.map((item) => {
-      const role = roles.find((role) => role.roomName === item.roomName)
-      if (role) {
-        return role
+      const category = categories.find((category) => category.categoryName === item.categoryName)
+      if (category) {
+        return category
       }
       return item
     })
     setFormData(newFormData)
   }
 
-  //Hàm cập nhật lại id cho những role cần update
-  const UpdateIdFormDataUpdate = (roles: interfaceFormData[]) => {
+  //Hàm cập nhật lại id cho những category cần update
+  const UpdateIdFormDataUpdate = (categories: interfaceFormData[]) => {
     const newFormData = updateData.map((item) => {
-      const role = roles.find((role) => role.roomName === item.roomName)
-      if (role) {
-        return role
+      const category = categories.find((category) => category.categoryName === item.categoryName)
+      if (category) {
+        return category
       }
       return item
     })
@@ -139,7 +139,7 @@ const RoomCategory = () => {
   const HandleClickDeleteInput = () => {
     if (isNumber(deleteData.id)) {
       http
-        .delete(`role/delete`, {
+        .delete(`category/delete`, {
           data: {
             id: deleteData.id
           }
@@ -157,20 +157,20 @@ const RoomCategory = () => {
       handleDeleteData(deleteData)
     }
     setShowModal(false)
-    const isExistUpdate = updateData.some((role) => role.id === deleteData.id)
+    const isExistUpdate = updateData.some((category) => category.id === deleteData.id)
     if (isExistUpdate) {
       handleRemoveUpdateData(deleteData)
     }
   }
 
   //Function hiện thông báo yêu cầu xác nhận
-  const handleShowModal = (role: interfaceFormData) => {
-    if (RoleConstant.some((item) => item === role.roomName)) {
-      toast.error('Không thể xóa role này!')
+  const handleShowModal = (category: interfaceFormData) => {
+    if (RoleConstant.some((item) => item === category.categoryName)) {
+      toast.error('Không thể xóa loại này!')
       return
     }
     setShowModal(true)
-    setDeleteData(role)
+    setDeleteData(category)
   }
 
   const handleCloseModal = () => {
@@ -184,7 +184,7 @@ const RoomCategory = () => {
     setArrErrorInput(initial)
     let _newState = _.cloneDeep(initial)
     formData.map((item, index) => {
-      if (!item.roomName) {
+      if (!item.categoryName) {
         _newState.push(item.id)
         setArrErrorInput(_newState)
         check = false
@@ -198,7 +198,7 @@ const RoomCategory = () => {
     if (check) {
       const data = buildData()
       http
-        .post('role/create', data)
+        .post('category/create', data)
         .then((res: any) => {
           toast.success(res.message)
           UpdateIdFormData(res.data)
@@ -206,35 +206,35 @@ const RoomCategory = () => {
         })
         .catch((err) => {
           console.log('Error:', err)
-          toast.error('Thêm mới role thất bại!')
+          toast.error('Thêm mới loại phòng thất bại!')
         })
     } else {
-      toast.error('Vui lòng nhập URL!')
+      toast.error('Vui lòng nhập loại phòng!')
     }
   }
 
   const buildData = () => {
     const data = formData.map((item) => {
       return {
-        roomName: item.roomName,
+        categoryName: item.categoryName,
         description: item.description
       }
     })
     return data
   }
 
-  const handleAddUpdateData = (role: interfaceFormData) => {
-    if (RoleConstant.some((item) => item === role.roomName)) {
-      toast.error('Không thể cập nhật role này!')
+  const handleAddUpdateData = (category: interfaceFormData) => {
+    if (RoleConstant.some((item) => item === category.categoryName)) {
+      toast.error('Không thể cập nhật category này!')
       return
     }
-    const newUpdateData = updateData.filter((item) => item.id !== role.id)
-    newUpdateData.push(role)
+    const newUpdateData = updateData.filter((item) => item.id !== category.id)
+    newUpdateData.push(category)
     setUpdateData(newUpdateData)
   }
 
-  const handleRemoveUpdateData = (role: interfaceFormData) => {
-    const newUpdateData = updateData.filter((item) => item.id !== role.id)
+  const handleRemoveUpdateData = (category: interfaceFormData) => {
+    const newUpdateData = updateData.filter((item) => item.id !== category.id)
     setUpdateData(newUpdateData)
   }
 
@@ -245,7 +245,7 @@ const RoomCategory = () => {
     }
     if (debouncedValue) {
       http
-        .get(`role/search`, {
+        .get(`category/search`, {
           params: {
             search: debouncedValue
           }
@@ -270,7 +270,7 @@ const RoomCategory = () => {
               'is-invalid': arrErrorInput.some((errorItem) => errorItem === item.id)
             })}
             type='text'
-            value={item.roomName}
+            value={item.categoryName}
             onChange={(e) => handleOnChangeUrl(index, e.target.value, item.id)}
           />
         </div>
@@ -290,7 +290,7 @@ const RoomCategory = () => {
           <button onClick={() => handleShowModal(item)} className={cx('btn', 'btn-danger', 'mr-3')}>
             <FontAwesomeIcon icon={faTrash} />
           </button>
-          {updateData.some((role) => role.id === item.id) ? (
+          {updateData.some((category) => category.id === item.id) ? (
             <>
               <button onClick={() => handleRemoveUpdateData(item)} className={cx('btn', 'btn-warning')}>
                 <FontAwesomeIcon icon={faBan} />
@@ -310,7 +310,7 @@ const RoomCategory = () => {
 
   const fetchData = () => {
     http
-      .get('roles')
+      .get('categories')
       .then((res) => {
         setFormData(res.data)
       })
@@ -318,10 +318,6 @@ const RoomCategory = () => {
         console.log('Error:', err)
       })
   }
-
-  useEffect(() => {
-    fetchData()
-  }, [])
 
   const handleRefresh = () => {
     setUpdateData([])
@@ -337,14 +333,14 @@ const RoomCategory = () => {
     }
     if (updateData.length > 0) {
       http
-        .put('role/update', updateData)
+        .put('category/update', updateData)
         .then((res: any) => {
           toast.success(res.message)
           setUpdateData([])
         })
         .catch((err) => {
           console.log('Error:', err.message)
-          toast.error('Cập nhật role thất bại!')
+          toast.error('Cập nhật category thất bại!')
         })
     }
   }
@@ -396,7 +392,7 @@ const RoomCategory = () => {
       </div>
       <ConfirmModal
         title='Confirm delete!'
-        notification={`Bạn có chắc chắn muốn xóa role: ${deleteData.roomName}`}
+        notification={`Bạn có chắc chắn muốn xóa category: ${deleteData.categoryName}`}
         action='Delete'
         show={showModal}
         handleCloseModal={handleCloseModal}

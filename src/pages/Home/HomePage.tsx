@@ -4,10 +4,73 @@ import Search from 'layouts/components/Search'
 import configRoutes from '../../config'
 import { Link } from 'react-router-dom'
 import RealEstateItem from './components/RealEstateItem'
+import { useEffect, useState } from 'react'
+import http from 'Utils/httpRequest'
 
 const cx = classNames.bind(styles)
 
+export interface interfaceRoom_HomePage {
+  id: number
+  roomNumber: string
+  status: number
+  price: number
+  categoryId: number
+  image: string
+  description: string | null
+  Category: {
+    id: number
+    categoryName: string
+    description: string
+  }
+}
+
 function HomePage(props: any) {
+  const [singleRoomsList, setSingleRoomsList] = useState<interfaceRoom_HomePage[]>([])
+  const [doubleRoomsList, setDoubleRoomsList] = useState<interfaceRoom_HomePage[]>([])
+  const [coupleRoomsList, setCoupleRoomsList] = useState<interfaceRoom_HomePage[]>([])
+
+  useEffect(() => {
+    http.get('/room/empty-by-category', { params: { categoryId: 1 } }).then((response) => {
+      setSingleRoomsList(response.data)
+    })
+    http.get('/room/empty-by-category', { params: { categoryId: 5 } }).then((response) => {
+      setDoubleRoomsList(response.data)
+    })
+    http.get('/room/empty-by-category', { params: { categoryId: 6 } }).then((response) => {
+      setCoupleRoomsList(response.data)
+    })
+  }, [])
+
+  const renderSingleRooms = () => {
+    return (
+      <>
+        {singleRoomsList.map((item) => {
+          return <RealEstateItem key={item.id} room={item} />
+        })}
+      </>
+    )
+  }
+
+  const renderDoubleRooms = () => {
+    return (
+      <>
+        {doubleRoomsList.map((item) => {
+          return <RealEstateItem key={item.id} room={item} />
+        })}
+      </>
+    )
+  }
+
+  const renderCoupleRooms = () => {
+    return (
+      <>
+        {coupleRoomsList.map((item) => {
+          return <RealEstateItem key={item.id} room={item} />
+        })}
+      </>
+    )
+  }
+
   return (
     <div className={cx('homePage_container')}>
       <div className={cx('desktop')}>
@@ -118,26 +181,24 @@ function HomePage(props: any) {
               </Link>
             </div>
           </div>
-          <div className={cx('list-items', 'property-for-sale')}>
-            <h2 className={cx('title')}>Bất động sản đăng bán</h2>
-            <div className={cx('property-items', 'clearfix', 'mg-scroll')}>
-              <RealEstateItem />
-              <RealEstateItem />
-              <RealEstateItem />
-              <RealEstateItem />
-              <RealEstateItem />
+          {singleRoomsList.length > 0 && (
+            <div className={cx('list-items', 'property-for-sale')}>
+              <h2 className={cx('title')}>Phòng 1 giường đơn</h2>
+              <div className={cx('property-items', 'clearfix', 'mg-scroll')}>{renderSingleRooms()}</div>
             </div>
-          </div>
-          <div className={cx('list-items', 'property-for-rent')}>
-            <h2 className={cx('title')}>Bất động sản cho thuê</h2>
-            <div className={cx('property-items', 'clearfix', 'mg-scroll')}>
-              <RealEstateItem />
-              <RealEstateItem />
-              <RealEstateItem />
-              <RealEstateItem />
-              <RealEstateItem />
+          )}
+          {doubleRoomsList.length > 0 && (
+            <div className={cx('list-items', 'property-for-rent')}>
+              <h2 className={cx('title')}>Phòng 2 giường đơn</h2>
+              <div className={cx('property-items', 'clearfix', 'mg-scroll')}>{renderDoubleRooms()}</div>
             </div>
-          </div>
+          )}
+          {coupleRoomsList.length > 0 && (
+            <div className={cx('list-items', 'property-for-rent')}>
+              <h2 className={cx('title')}>Phòng 1 giường đôi</h2>
+              <div className={cx('property-items', 'clearfix', 'mg-scroll')}>{renderCoupleRooms()}</div>
+            </div>
+          )}
         </div>
         {/* <div className={cx('features')}>
           <div className={cx('mg-1170-container')}>

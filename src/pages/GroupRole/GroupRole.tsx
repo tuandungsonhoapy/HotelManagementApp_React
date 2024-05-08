@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import http from 'Utils/httpRequest'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRefresh, faSave } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faRefresh, faSave } from '@fortawesome/free-solid-svg-icons'
+import { useNavigate } from 'react-router-dom'
 
 const cx = classNames.bind(styles)
 
@@ -26,6 +27,8 @@ function GroupRole(props: any) {
   const [selectedGroup, setSelectedGroup] = useState<number>(1)
   const [rolesList, setRolesList] = useState<interfaceRole[]>([])
   const [assignRolesByGroup, setAssignRolesByGroup] = useState<interfaceRole[]>([])
+
+  const navigation = useNavigate()
 
   const renderGroupList = () => {
     return (
@@ -144,10 +147,19 @@ function GroupRole(props: any) {
       })
   }
 
+  const handleClickBack = () => {
+    navigation(-1)
+  }
+
   return (
     <div className={cx('groupRole_container')}>
-      <div className={cx('container')}>
-        <h3>Group Role:</h3>
+      <div className={cx('container', 'pt-3')}>
+        <div className={cx('d-flex', 'align-items-center', 'mb-3')}>
+          <button onClick={handleClickBack} className={cx('btn', 'btn-primary', 'mr-3')}>
+            <FontAwesomeIcon icon={faArrowLeft} />
+          </button>
+          <h3>Group Role:</h3>
+        </div>
         <div>
           <div className={cx('col-6', 'form-group', 'mb-3')}>
             <select

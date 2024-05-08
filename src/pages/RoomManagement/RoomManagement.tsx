@@ -6,60 +6,39 @@ import Image from 'components/Image'
 import http from 'Utils/httpRequest'
 import { toast } from 'react-toastify'
 import ReactPaginate from 'react-paginate'
-import { createUser, getUserWithPagination, searchUser, updateUser } from 'services/authService'
 import ConfirmModal from 'components/Modal'
-import UserModal from 'components/UserModal/UserModal'
-import { interfaceRegister } from 'types/auth.type'
-import { useAppDispatch } from 'store'
-import { setShowUpdateUser } from 'pages/auth.slice'
-import { defaultFormRegister } from 'constants/register'
+import RoomModal from './components/Modal'
+import { RootState, useAppDispatch } from 'store'
 import { Link } from 'react-router-dom'
 import configRoutes from '../../config'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import { faHouse } from '@fortawesome/free-solid-svg-icons'
 import { useDebounce } from 'hooks'
-
-const initialUser: interfaceUser = {
-  id: 0,
-  firstName: '',
-  lastName: '',
-  username: '',
-  phone: '',
-  avatar: null,
-  groupId: 1,
-  Group: null
-}
-
-interface interfaceUser {
-  id?: number
-  firstName: string
-  lastName: string
-  username: string
-  password?: string
-  phone: string
-  avatar?: string | null | undefined
-  groupId: number
-  Group?:
-    | {
-        id: number
-        groupName: string
-        description: string
-      }
-    | null
-    | undefined
-}
+import { useSelector } from 'react-redux'
+import { createRoom, getRooms, interfaceRoom, setRoom, updateRoom } from './room.slice'
+import { get, set } from 'lodash'
 
 const cx = classNames.bind(styles)
 
+const initialRoom: interfaceRoom = {
+  id: 0,
+  roomNumber: '',
+  status: 0,
+  price: 0,
+  categoryId: 0,
+  image: ''
+}
+
 const RoomManagement = () => {
-  const [usersList, setUsersList] = useState<interfaceUser[]>([])
+  const roomsList = useSelector((state: RootState) => state.room.rooms)
+  const room = useSelector((state: RootState) => state.room.room)
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [currentLimit, setCurrentLimit] = useState<number>(10)
   const [totalPages, setTotalPages] = useState<number>(1)
   const [showModal, setShowModal] = useState<boolean>(false)
-  const [dataModal, setDataModal] = useState<interfaceUser>(initialUser)
-  const [showUserCreationModal, setShowUserCreationModal] = useState<boolean>(false)
-  const [actionUserModal, setActionUserModal] = useState<string>('Create')
+  const [dataModal, setDataModal] = useState<interfaceRoom>(initialRoom)
+  const [showRoomCreationModal, setShowRoomCreationModal] = useState<boolean>(false)
+  const [actionRoomModal, setActionRoomModal] = useState<string>('Create')
   const [searchData, setSearchData] = useState<string>('')
 
   const debouncedValue = useDebounce(searchData, 700)
@@ -67,20 +46,22 @@ const RoomManagement = () => {
   const disPatch = useAppDispatch()
 
   //Function render danh sách tài khoản người dùng
-  const RenderUsers = () => {
+  const RenderRooms = () => {
     const startIndex = (currentPage - 1) * currentLimit
     return (
       <>
-        {usersList.map((item, index) => {
+        {roomsList.map((item, index) => {
           return (
             <tr key={item.id}>
               <td>{index + 1 + startIndex}</td>
-              <td>{item.firstName + ' ' + item.lastName}</td>
-              <td>{item.username}</td>
-              <td>{item.phone}</td>
-              <td>{item.Group?.groupName || 'Không có vài trò'}</td>
+              <td>{item.roomNumber}</td>
+              {item.status === 0 && <td>Trống</td>}
+              {item.status === 1 && <td>Đã thuê</td>}
+              {item.status === -1 && <td>Đang dọn dẹp</td>}
+              <td>{item.price}</td>
+              <td>{item.Category?.categoryName || 'Không thuộc loại phòng nào'}</td>
               <td>
-                <Image className={cx('user-avatar')} src={item.avatar} />
+                <Image className={cx('room-avatar')} src={item.image} />
               </td>
               <td>
                 <button className={cx('btn btn-danger', 'mr-2')} onClick={() => handleShowModal(item)}>
@@ -97,58 +78,58 @@ const RoomManagement = () => {
     )
   }
 
-  const handleClickUpdate = (data: interfaceUser) => {
-    console.log('>>>>>>>>>>>>>data: ', data)
-    setActionUserModal('Update')
-    const payload: interfaceRegister = {
-      ...defaultFormRegister,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      username: data.username,
-      phone: data.phone,
-      groupId: data.groupId,
-      id: data.id
-    }
-    disPatch(setShowUpdateUser(payload))
-    setShowUserCreationModal(true)
-  }
-
   console.log('re-render')
 
   //Hàm lấy danh sách tài khoản người dùng
-  const fetchUserList = () => {
-    getUserWithPagination(currentPage, currentLimit)
-      .then((response) => {
-        console.log('>>>>>>>>>>>>>>check response: ', response)
-        setUsersList(response.data.users)
-        setTotalPages(response.data.totalPages)
-      })
-      .catch(() => {
-        toast.error('Lỗi không thể lấy thông tinh danh sách tài khoản người dùng!')
-      })
-  }
+  // const fetchUserList = () => {
+  //   getUserWithPagination(currentPage, currentLimit)
+  //     .then((response) => {
+  //       console.log('>>>>>>>>>>>>>>check response: ', response)
+  //       setUsersList(response.data.users)
+  //       setTotalPages(response.data.totalPages)
+  //     })
+  //     .catch(() => {
+  //       toast.error('Lỗi không thể lấy thông tinh danh sách tài khoản người dùng!')
+  //     })
+  // }
 
-  useEffect(() => {
-    if (!searchData) {
-      fetchUserList()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentLimit, currentPage])
+  // useEffect(() => {
+  //   if (!searchData) {
+  //     fetchUserList()
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [currentLimit, currentPage])
 
   const handlePageClick = (event: any) => {
     setCurrentPage(event.selected + 1)
   }
 
-  //Function hiện thông báo yêu cầu xác nhận
-  const handleShowModal = (user: interfaceUser) => {
+  // //Function hiện thông báo yêu cầu xác nhận
+  const handleShowModal = (room: interfaceRoom) => {
     setShowModal(true)
-    setDataModal(user)
+    setDataModal(room)
   }
 
-  //Function thực hiện xóa user
+  const handleClickUpdate = (data: interfaceRoom) => {
+    console.log('>>>>>>>>>>>>>data: ', data)
+    setActionRoomModal('Update')
+    const payload: interfaceRoom = {
+      ...room,
+      roomNumber: data.roomNumber,
+      status: data.status,
+      price: data.price,
+      categoryId: data.categoryId,
+      image: data.image,
+      id: data.id
+    }
+    disPatch(setRoom(payload))
+    setShowRoomCreationModal(true)
+  }
+
+  // //Function thực hiện xóa room
   const handleClickDelete = () => {
     http
-      .delete('user/delete', {
+      .delete('room/delete', {
         data: {
           id: dataModal.id
         }
@@ -156,9 +137,9 @@ const RoomManagement = () => {
       .then((response) => {
         if (response && response.status === 200) {
           try {
-            fetchUserList()
+            disPatch(getRooms())
             toast.success('Delete successfully!')
-            setDataModal(initialUser)
+            setDataModal(initialRoom)
             setShowModal(false)
           } catch (error) {
             toast.error('Delete failed!')
@@ -169,106 +150,122 @@ const RoomManagement = () => {
 
   const handleCloseModal = () => {
     setShowModal(false)
-    setDataModal(initialUser)
+    disPatch(setRoom(initialRoom))
   }
 
-  const handleClickCreateUser = () => {
-    setActionUserModal('Create')
-    setShowUserCreationModal(true)
+  const handleClickCreateRoom = () => {
+    setActionRoomModal('Create')
+    setShowRoomCreationModal(true)
   }
 
   const handleHideModal = () => {
-    setShowUserCreationModal(false)
+    setShowRoomCreationModal(false)
   }
 
-  //Function create user
-  const handleCreateUser = async (data: interfaceRegister) => {
-    const result = await createUser(data).then((response: any) => {
-      if (response && response.status === 200 && response.code === 0) {
-        try {
-          fetchUserList()
-          toast.success('Create user successfully!')
-        } catch (error) {
-          toast.error('Create failed')
+  // //Function create room
+  const handleCreateRoom = async (data: interfaceRoom) => {
+    let result = {}
+    await disPatch(createRoom(data))
+      .unwrap()
+      .then((response: any) => {
+        console.log('response from create room: ', response)
+        if (response && response.status === 200 && response.code === 0) {
+          try {
+            disPatch(getRooms())
+            toast.success('Create room successfully!')
+          } catch (error) {
+            toast.error('Create failed')
+          }
+          result = {
+            check: true,
+            data: response.data
+          }
         }
-        return {
-          check: true,
-          data: response.data
+        if (response && response.status === 200 && response.code === 1) {
+          toast.error(response.message)
+          result = {
+            check: false,
+            data: response.data
+          }
         }
-      }
-      if (response && response.status === 200 && response.code === 1) {
-        toast.error(response.message)
-        return {
+      })
+      .catch((error) => {
+        toast.error('Something wrongs with server!')
+        result = {
           check: false,
-          data: response.data
+          data: error.data
         }
-      }
-    })
-    console.log(result)
+      })
+    console.log('create room check >>>>>>>>>>>>:', result)
     return result
   }
 
-  //Function update user
-  const handleUpdateUser = async (data: interfaceRegister) => {
-    const result = await updateUser(data).then((response: any) => {
-      if (response && response.status === 200 && response.code === 0) {
-        try {
-          fetchUserList()
-          toast.success('Update user successfully!')
-        } catch (error) {
-          toast.error('Update failed')
+  // //Function update room
+  const handleUpdateRoom = async (data: interfaceRoom) => {
+    let result = {}
+    await disPatch(updateRoom(data))
+      .unwrap()
+      .then((response: any) => {
+        if (response && response.status === 200 && response.code === 0) {
+          try {
+            disPatch(getRooms())
+            toast.success('Update room successfully!')
+          } catch (error) {
+            toast.error('Update failed')
+          }
+          result = {
+            check: true,
+            data: response.data
+          }
         }
-        return {
-          check: true,
-          data: response.data
+        if (response && response.status === 200 && response.code === 1) {
+          toast.error(response.message)
+          result = {
+            check: false,
+            data: response.data
+          }
         }
-      }
-      if (response && response.status === 200 && response.code === 1) {
-        toast.error(response.message)
-        return {
+      })
+      .catch((error) => {
+        toast.error('Something wrongs with server!')
+        result = {
           check: false,
-          data: response.data
+          data: error.data
         }
-      }
-      toast.error('Something wrongs with server!')
-      return {
-        check: false,
-        data: 'Somthing wrongs with server'
-      }
-    })
+      })
     return result
   }
 
-  //Hàm lấy danh sách tài khoản người dùng
-  const searchUserList = () => {
-    searchUser(currentPage, currentLimit, searchData)
-      .then((response) => {
-        console.log('>>>>>>>>>>>>>>check response: ', response)
-        setUsersList(response.data.users)
-        setTotalPages(response.data.totalPages)
-      })
-      .catch(() => {
-        toast.error('Lỗi không thể lấy thông tinh danh sách tài khoản người dùng!')
-      })
-  }
+  // //Hàm lấy danh sách tài khoản người dùng
+  // const searchUserList = () => {
+  //   searchUser(currentPage, currentLimit, searchData)
+  //     .then((response) => {
+  //       console.log('>>>>>>>>>>>>>>check response: ', response)
+  //       setUsersList(response.data.users)
+  //       setTotalPages(response.data.totalPages)
+  //     })
+  //     .catch(() => {
+  //       toast.error('Lỗi không thể lấy thông tinh danh sách tài khoản người dùng!')
+  //     })
+  // }
 
   useEffect(() => {
     if (!debouncedValue.trim()) {
-      fetchUserList()
+      disPatch(getRooms())
       return
     }
-    if (debouncedValue) {
-      searchUserList()
-    }
+    // if (debouncedValue) {
+    //   searchUserList()
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedValue, currentPage, currentLimit])
 
   return (
-    <>
+    <div className={cx('page_container')}>
       <div className={cx('container', 'header_content', 'd-flex', 'justify-content-between')}>
         <div className={cx('container')}>
-          <button onClick={handleClickCreateUser} className={cx('btn btn-success mt-2 mr-3 mb-2')}>
-            <FontAwesomeIcon icon={faUserPlus} />
+          <button onClick={handleClickCreateRoom} className={cx('btn btn-success mt-2 mr-3 mb-2')}>
+            Thêm mới phòng <FontAwesomeIcon icon={faHouse} />
           </button>
           <Link className={cx('btn btn-primary mt-2 mb-2')} to={configRoutes.routes.roomCategory}>
             Room Category
@@ -291,18 +288,18 @@ const RoomManagement = () => {
               <thead className={cx('table-dark')}>
                 <tr>
                   <th>STT</th>
-                  <th>Họ tên</th>
-                  <th>Username</th>
-                  <th>Phone</th>
-                  <th>Vai trò</th>
-                  <th>Avatar</th>
+                  <th>Tên phòng</th>
+                  <th>Trạng thái</th>
+                  <th>Giá phòng</th>
+                  <th>Loại phòng</th>
+                  <th>Ảnh</th>
                   <th></th>
                 </tr>
               </thead>
-              <tbody>{RenderUsers()}</tbody>
+              <tbody>{RenderRooms()}</tbody>
             </table>
           </div>
-          <div className={cx('user-pagination')}>
+          <div className={cx('room-pagination')}>
             <ReactPaginate
               nextLabel='next >'
               onPageChange={handlePageClick}
@@ -328,21 +325,21 @@ const RoomManagement = () => {
       </div>
       <ConfirmModal
         title='Confirm delete!'
-        notification={`Bạn có chắc chắn muốn xóa người dùng: ${dataModal.username}!`}
+        notification={`Bạn có chắc chắn muốn xóa người dùng: ${dataModal.roomNumber}!`}
         action='Delete'
         show={showModal}
         handleCloseModal={handleCloseModal}
         handleClickDelete={handleClickDelete}
       />
-      <UserModal
-        title={actionUserModal + ' user'}
-        showModal={showUserCreationModal}
-        action={actionUserModal}
+      <RoomModal
+        title={actionRoomModal + ' room'}
+        showModal={showRoomCreationModal}
+        action={actionRoomModal}
         handleHileModal={handleHideModal}
-        handleCreateUser={handleCreateUser}
-        handleUpdateUser={handleUpdateUser}
+        handleCreateRoom={handleCreateRoom}
+        handleUpdateRoom={handleUpdateRoom}
       />
-    </>
+    </div>
   )
 }
 

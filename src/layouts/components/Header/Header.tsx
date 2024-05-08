@@ -103,6 +103,9 @@ function Header() {
           </Link>
         </div>
         <div className={cx('navbar_menu')}>
+          <Link to={configRoutes.routes.paymentInvoice}>
+            Hóa đơn thanh toán<span className='badge bg-danger rounded-pill'>14</span>
+          </Link>
           <Link to={configRoutes.routes.danhMucPhong}>Danh mục phòng</Link>
           <Link to={configRoutes.routes.hoiDap}>Hỏi đáp</Link>
           <Link to={configRoutes.routes.blog}>Blogs</Link>

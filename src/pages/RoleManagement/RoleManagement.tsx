@@ -316,13 +316,9 @@ const RoleManagement = () => {
         setFormData(res.data)
       })
       .catch((err) => {
-        console.log('Error:', err)
+        console.log('Error:', err.message)
       })
   }
-
-  useEffect(() => {
-    fetchData()
-  }, [])
 
   const handleRefresh = () => {
     setUpdateData([])

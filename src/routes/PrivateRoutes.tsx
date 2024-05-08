@@ -4,10 +4,13 @@ import RoleManagement from 'pages/RoleManagement'
 import RoomManagement from 'pages/RoomManagement'
 import RoomCategory from 'pages/RoomCategory'
 import GroupRole from 'pages/GroupRole'
+import Booking from 'pages/Booking'
+import Invoice from 'pages/Invoice'
 
 //Layouts
 import { DefaultLayoutProps } from 'interfaces/layout.interface'
 import AdminLayout from 'layouts/AdminLayout'
+import DefaultLayout from 'layouts/DefaultLayout'
 
 //routesConfig
 import config from '../config'
@@ -16,6 +19,8 @@ import { Route, Routes, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store'
+import { useLocation } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 interface privateRoute {
   path: string
@@ -30,7 +35,9 @@ const privateRoutes: typePrivateRoutes = [
   { path: config.routes.role, component: RoleManagement, layout: AdminLayout },
   { path: config.routes.roomManagement, component: RoomManagement, layout: AdminLayout },
   { path: config.routes.roomCategory, component: RoomCategory, layout: AdminLayout },
-  { path: config.routes.groupRole, component: GroupRole, layout: AdminLayout }
+  { path: config.routes.groupRole, component: GroupRole, layout: AdminLayout },
+  { path: config.routes.booking, component: Booking, layout: DefaultLayout },
+  { path: config.routes.paymentInvoice, component: Invoice, layout: DefaultLayout }
 ]
 
 const PrivateRoutes = () => {
@@ -41,8 +48,10 @@ const PrivateRoutes = () => {
     useEffect(() => {
       if (currentUser.isAuthenticated === false) {
         navigate(-1)
+        toast.error('Bạn cần đăng nhập để truy cập trang này')
       }
-    })
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
     return <>{children}</>
   }
 

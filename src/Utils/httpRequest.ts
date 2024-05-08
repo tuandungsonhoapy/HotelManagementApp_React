@@ -57,32 +57,32 @@ class Http {
         switch (status) {
           // authentication (token related issues)
           case 401: {
-            return Promise.reject(error)
+            return Promise.reject(error.response.data)
           }
 
           // forbidden (permission related issues)
           case 403: {
-            return Promise.reject(error)
+            return Promise.reject(error.response.data)
           }
 
           // bad request
           case 400: {
-            return Promise.reject(error)
+            return Promise.reject(error.response.data)
           }
 
           // not found
           case 404: {
-            return Promise.reject(error)
+            return Promise.reject(error.response.data)
           }
 
           // conflict
           case 409: {
-            return Promise.reject(error)
+            return Promise.reject(error.response.data)
           }
 
           // unprocessable
           case 422: {
-            return Promise.reject(error)
+            return Promise.reject(error.response.data)
           }
 
           // generic api error (server related) unexpected

@@ -1,31 +1,42 @@
 import classNames from 'classnames/bind'
 import styles from './RealEstateItem.module.scss'
 import { Link } from 'react-router-dom'
+import { interfaceRoom_HomePage } from 'pages/Home/HomePage'
+import configRoutes from '../../../../config'
+import { Alert } from 'react-bootstrap'
+import { useAppDispatch } from 'store'
+import { getRoom } from 'pages/booking.slice'
 
 const cx = classNames.bind(styles)
 
 interface Props {
-  item?: any
+  room: interfaceRoom_HomePage
 }
 
-const RealEstateItem = ({ item }: Props) => (
-  <div className={cx('property-item')}>
-    <img
-      src='https://cloud.mogi.vn/images/thumb-small/2024/03/01/540/fd592788ee2e41b7b0d861daea7308e3.jpg'
-      alt='mpgi'
-    />
-    <Link to={'#'}>
-      <h3 className={cx('property-title')}>Căn hộ Mt Phạm Thế Hiển 850tr/2PN,Sổ riêng,cho góp dài 0%ls O93ZZO3848</h3>
+const RealEstateItem = ({ room }: Props) => {
+  const disPatch = useAppDispatch()
+
+  const handleClick = () => {
+    disPatch(getRoom(room.id))
+  }
+
+  return (
+    <Link to={configRoutes.routes.booking} onClick={handleClick}>
+      <div className={cx('property-item')}>
+        <img
+          src='https://cloud.mogi.vn/images/thumb-small/2024/03/01/540/fd592788ee2e41b7b0d861daea7308e3.jpg'
+          alt='mpgi'
+        />
+        <Link to={configRoutes.routes.booking} onClick={handleClick}>
+          <h3 className={cx('property-title')}>Phòng {room.roomNumber}</h3>
+        </Link>
+        <div className={cx('property-attr')}>
+          <span>{room.Category.description}</span>
+        </div>
+        <div className={cx('price')}>{room.price}đ</div>
+      </div>
     </Link>
-    <div className={cx('property-attr')}>
-      <span className={cx('land')}>
-        45 m<sup>2</sup>
-      </span>
-      <span>2 PN</span>
-      <span>2 WC</span>
-    </div>
-    <div className={cx('price')}>850 triệu</div>
-  </div>
-)
+  )
+}
 
 export default RealEstateItem
