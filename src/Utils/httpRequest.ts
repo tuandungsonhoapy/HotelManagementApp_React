@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios'
-import { store } from 'store'
+// import { store } from '../store'
+import { Store } from '@reduxjs/toolkit'
 
 function getCookie(cname: string) {
   let name = cname + '='
@@ -19,16 +20,20 @@ function getCookie(cname: string) {
 
 class Http {
   instance: AxiosInstance
+  store: Store | null = null
   constructor() {
     this.instance = axios.create({
       baseURL: 'http://localhost:8080/api/v1',
       timeout: 10000
     })
 
-    store.subscribe(() => {
-      this.instance.defaults.headers.common['Authorization'] = `Bearer ${store.getState().auth.user.token}`
-    })
+    // store.subscribe(() => {
+    //   this.instance.defaults.headers.common['Authorization'] = `Bearer ${store.getState().auth.user.token}`
+    // })
 
+    // const jwtCookie = getCookie('jwt')
+
+    // this.instance.defaults.headers.common['Authorization'] = `Bearer ${jwtCookie}`
     this.instance.defaults.withCredentials = true
 
     // Add a request interceptor
@@ -93,8 +98,18 @@ class Http {
       }
     )
   }
+
+  setStore(store: Store) {
+    this.store = store
+    this.store.subscribe(() => {
+      if (this.instance && this.store) {
+        this.instance.defaults.headers.common['Authorization'] = `Bearer ${this.store.getState().auth.user.token}`
+      }
+    })
+  }
 }
 
-const http = new Http().instance
+export const httpObject = new Http()
+const http = httpObject.instance
 
 export default http

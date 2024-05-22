@@ -6,6 +6,7 @@ interface Routes {
   logout: string
   settings: string
   viewprofile: string
+  productDetail: string
   user: string
   timMua: string
   timThue: string
@@ -23,6 +24,9 @@ interface Routes {
   groupRole: string
   booking: string
   paymentInvoice: string
+  invoiceInfo: string
+  invoiceManagement: string
+  invoiceInfoAdmin: string
 }
 
 const routes: Routes = {
@@ -35,6 +39,7 @@ const routes: Routes = {
   viewprofile: '/viewprofile',
   user: '/user',
   timMua: '/tim-mua',
+  productDetail: '/product-detail',
   timThue: '/tim-thue',
   giaNhaDat: '/gia-nha-dat',
   hoiDap: '/hoi-dap',
@@ -49,7 +54,10 @@ const routes: Routes = {
   roomCategory: '/room-category',
   groupRole: '/group-role',
   booking: '/booking',
-  paymentInvoice: '/payment-invoice'
+  paymentInvoice: '/payment-invoice',
+  invoiceInfo: '/invoice-info',
+  invoiceManagement: '/invoice-management',
+  invoiceInfoAdmin: '/invoice-info-admin'
 }
 
 export default routes

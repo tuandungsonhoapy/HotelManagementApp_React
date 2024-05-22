@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import authReducer from 'pages/auth.slice'
 import roomReducer from 'pages/RoomManagement/room.slice'
 import bookingReducer from 'pages/booking.slice'
+import { httpObject } from 'Utils/httpRequest'
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,8 @@ export const store = configureStore({
     booking: bookingReducer
   }
 })
+
+httpObject.setStore(store)
 
 //Lấy rootstate và appdispatch từ store
 export type RootState = ReturnType<typeof store.getState>

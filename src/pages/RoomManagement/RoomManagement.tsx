@@ -56,7 +56,8 @@ const RoomManagement = () => {
               <td>{index + 1 + startIndex}</td>
               <td>{item.roomNumber}</td>
               {item.status === 0 && <td>Trống</td>}
-              {item.status === 1 && <td>Đã thuê</td>}
+              {item.status === 1 && <td>Đang được đặt cọc</td>}
+              {item.status === 2 && <td>Đã thuê</td>}
               {item.status === -1 && <td>Đang dọn dẹp</td>}
               <td>{item.price}</td>
               <td>{item.Category?.categoryName || 'Không thuộc loại phòng nào'}</td>

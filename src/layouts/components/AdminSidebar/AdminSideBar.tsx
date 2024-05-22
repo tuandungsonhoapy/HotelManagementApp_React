@@ -17,6 +17,9 @@ const AdminSidebar = () => {
           <Link to={routesConfig.routes.roomManagement}>Quản lý phòng</Link>
         </li>
         <li>
+          <Link to={routesConfig.routes.invoiceManagement}>Quản lý hóa đơn</Link>
+        </li>
+        <li>
           <Link to='/manage-employees'>Quản lý nhân viên</Link>
         </li>
         <li>

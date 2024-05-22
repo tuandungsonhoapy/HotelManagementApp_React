@@ -209,7 +209,7 @@ button {
 .rectangle-b {
   position: relative;
   width: 916px;
-  height: 796px;
+  height: 860px;
   margin: 23px 0 0 284px;
   font-size: 0px;
   background: #ffffff;
@@ -440,8 +440,8 @@ button {
 .rectangle-14 {
   position: relative;
   width: 870px;
-  height: 197px;
-  margin: 27px 0 0 23px;
+  height: 200px;
+  margin: 0px 0 0 23px;
   font-size: 0px;
   background: #f5f5f5;
   z-index: 30;
@@ -489,7 +489,7 @@ button {
 
   height: 23px;
   margin-top: 20px;
-  margin-left: 55px;
+  margin-left: 23px;
   color: #8a8989;
   font-family: Inter, var(--default-font-family);
   font-size: 20px;

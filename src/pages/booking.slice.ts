@@ -32,7 +32,7 @@ export const getRoom = createAsyncThunk('BOOKING/GET_ROOM', async (id: number) =
 
 export const booking = createAsyncThunk('BOOKING/BOOKING', async (data: any) => {
   const response = await http.post('/booking/create', data)
-  return response.data
+  return response
 })
 
 export const bookingSlice = createSlice({

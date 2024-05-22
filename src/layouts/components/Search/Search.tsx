@@ -79,7 +79,7 @@ function Search() {
       >
         <div className={cx('search')}>
           <input
-            placeholder='Từ khóa, Đường, Quận hoặc địa danh ...'
+            placeholder='Từ khóa, Phòng, Loại phòng ...'
             spellCheck={false}
             onChange={handleChangeInput}
             value={searchValue}

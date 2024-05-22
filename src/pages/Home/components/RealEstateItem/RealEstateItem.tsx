@@ -24,7 +24,9 @@ const RealEstateItem = ({ room }: Props) => {
     <Link to={configRoutes.routes.booking} onClick={handleClick}>
       <div className={cx('property-item')}>
         <img
-          src='https://cloud.mogi.vn/images/thumb-small/2024/03/01/540/fd592788ee2e41b7b0d861daea7308e3.jpg'
+          src={
+            room.image || 'https://cloud.mogi.vn/images/thumb-small/2024/03/01/540/fd592788ee2e41b7b0d861daea7308e3.jpg'
+          }
           alt='mpgi'
         />
         <Link to={configRoutes.routes.booking} onClick={handleClick}>
@@ -33,7 +35,7 @@ const RealEstateItem = ({ room }: Props) => {
         <div className={cx('property-attr')}>
           <span>{room.Category.description}</span>
         </div>
-        <div className={cx('price')}>{room.price}đ</div>
+        <div className={cx('price')}>{room.price.toLocaleString('vi-VN')}đ</div>
       </div>
     </Link>
   )

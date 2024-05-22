@@ -19,6 +19,9 @@ import { interfaceMenuItem } from 'types/menu.type'
 import { logoutUser } from 'pages/auth.slice'
 import { logoutUserApi } from 'services/authService'
 import { toast } from 'react-toastify'
+import { useEffect, useState } from 'react'
+import http from 'Utils/httpRequest'
+import { set } from 'lodash'
 
 const cx = classNames.bind(styles)
 
@@ -53,6 +56,8 @@ const MENU = [
 
 function Header() {
   const currentUser = useSelector((state: RootState) => state.auth.user)
+  const [quantityInvoices, setQuantityInvoices] = useState<number>(0)
+  const [checkColor, setCheckColor] = useState<boolean>(false)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   //handleLogic
@@ -69,30 +74,67 @@ function Header() {
     }
   }
 
-  const userMenu = [
-    {
-      icon: images.iconViewProfile,
-      title: 'View profile',
-      to: configRoutes.routes.viewprofile
-    },
-    {
-      icon: images.iconSettings,
-      title: 'Settings',
-      to: configRoutes.routes.settings
-    },
-    ...MENU,
-    {
-      icon: images.iconViewProfile,
-      title: 'User management',
-      to: configRoutes.routes.user
-    },
-    {
-      icon: images.iconLogout,
-      title: 'Log out',
-      to: configRoutes.routes.logout,
-      separate: true
-    }
-  ]
+  const groupId = currentUser.groupWithRoles.id
+  let userMenu: any = []
+
+  if (groupId === 3 || groupId === 2) {
+    userMenu = [
+      {
+        icon: images.iconViewProfile,
+        title: 'View profile',
+        to: configRoutes.routes.viewprofile
+      },
+      {
+        icon: images.iconSettings,
+        title: 'Settings',
+        to: configRoutes.routes.settings
+      },
+      ...MENU,
+      {
+        icon: images.iconViewProfile,
+        title: 'Admin page',
+        to: configRoutes.routes.user
+      },
+      {
+        icon: images.iconLogout,
+        title: 'Log out',
+        to: configRoutes.routes.logout,
+        separate: true
+      }
+    ]
+  } else {
+    userMenu = [
+      {
+        icon: images.iconViewProfile,
+        title: 'View profile',
+        to: configRoutes.routes.viewprofile
+      },
+      {
+        icon: images.iconSettings,
+        title: 'Settings',
+        to: configRoutes.routes.settings
+      },
+      ...MENU,
+      {
+        icon: images.iconLogout,
+        title: 'Log out',
+        to: configRoutes.routes.logout,
+        separate: true
+      }
+    ]
+  }
+
+  useEffect(() => {
+    http
+      .get('invoice/quantity-by-user')
+      .then((res) => {
+        setQuantityInvoices(res.data.length)
+        setCheckColor(res.data.check)
+      })
+      .catch((error) => {
+        console.log('error: ', error)
+      })
+  }, [currentUser])
 
   return (
     <header className={cx('header_container')}>
@@ -103,9 +145,19 @@ function Header() {
           </Link>
         </div>
         <div className={cx('navbar_menu')}>
-          <Link to={configRoutes.routes.paymentInvoice}>
-            Hóa đơn thanh toán<span className='badge bg-danger rounded-pill'>14</span>
-          </Link>
+          {currentUser.isAuthenticated && (
+            <Link to={configRoutes.routes.paymentInvoice}>
+              Hóa đơn thanh toán
+              <span
+                className={cx('badge', 'rounded-pill', {
+                  'bg-danger': checkColor,
+                  'bg-success': !checkColor
+                })}
+              >
+                {quantityInvoices}
+              </span>
+            </Link>
+          )}
           <Link to={configRoutes.routes.danhMucPhong}>Danh mục phòng</Link>
           <Link to={configRoutes.routes.hoiDap}>Hỏi đáp</Link>
           <Link to={configRoutes.routes.blog}>Blogs</Link>

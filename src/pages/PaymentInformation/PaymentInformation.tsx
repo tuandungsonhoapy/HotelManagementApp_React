@@ -1,92 +1,212 @@
-import './PaymentInformation.css'
+import classNames from 'classnames/bind'
+import styles from './PaymentInfomation.module.scss'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import _, { set } from 'lodash'
+import { toast } from 'react-toastify'
+import http from 'Utils/httpRequest'
 import configRoutes from '../../config'
-import { Link } from 'react-router-dom'
 
-function PaymentInformation(props: any) {
+const cx = classNames.bind(styles)
+
+interface customerInfo {
+  fullname: string
+  email: string
+  address: string
+  cccd: string
+  [key: string]: string
+}
+
+const initialCustomerInfo: customerInfo = {
+  fullname: '',
+  email: '',
+  address: '',
+  cccd: ''
+}
+
+interface errorInputForm {
+  fullname: boolean
+  email: boolean
+  cccd: boolean
+  [key: string]: boolean
+}
+
+const initialErrorInputForm: errorInputForm = {
+  fullname: false,
+  email: false,
+  cccd: false
+}
+
+const PaymentInfomation = () => {
+  const location = useLocation()
+  const invoiceId = location.state.invoiceId
+  const [customerInfo, setCustomerInfo] = useState<customerInfo>(initialCustomerInfo)
+  const [checkError, setCheckError] = useState<errorInputForm>(initialErrorInputForm)
+  const [count, setCount] = useState<number>(300)
+  let price = location.state.totalAmount
+
+  const resultCheckError = useRef(false)
+  const paymentStatus = useRef(false)
+  const timeUp = useRef(false)
+
+  const navigate = useNavigate()
+
+  //Thực hiện validate register form before call api
+  const validateRegisterInfo = () => {
+    setCheckError(initialErrorInputForm)
+    resultCheckError.current = false
+    const arr = ['fullname', 'email', 'cccd']
+    let _formError = _.cloneDeep(initialErrorInputForm)
+    for (let i = 0; i < arr.length; i++) {
+      if (!customerInfo[arr[i]]) {
+        _formError[arr[i]] = true
+        setCheckError(() => _formError)
+        resultCheckError.current = true
+      }
+    }
+    if (resultCheckError.current === true) return false
+    return true
+  }
+
+  const handleConfirmPayment = () => {
+    const check = validateRegisterInfo()
+    if (check === false) {
+      toast.error('Vui lòng điền đầy đủ thông tin')
+      return
+    } else {
+      const data = { ...customerInfo, invoiceId: invoiceId, price: price }
+      console.log('data deposit', data)
+      http
+        .post('/invoice/pay-deposit', data)
+        .then(() => {
+          toast.success('Thanh toán thành công')
+          paymentStatus.current = true
+          navigate(configRoutes.routes.invoiceInfo, { state: { invoiceId } })
+        })
+        .catch(() => {
+          toast.error('Thanh toán thất bại')
+        })
+    }
+  }
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCount((prev) => prev - 1)
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [])
+
+  useEffect(() => {
+    if (count === 0) {
+      timeUp.current = true
+      navigate(configRoutes.routes.home)
+      let data = location.state.rooms
+      http
+        .post('booking/unlock-rooms', data)
+        .then(() => {
+          toast.error('Hủy thanh toán!')
+        })
+        .catch(() => {
+          toast.error('Hủy thanh toán!')
+        })
+    } else {
+      return () => {
+        console.log('call api to unlock rooms')
+        console.log('count', count)
+        if (paymentStatus.current === false && timeUp.current === false) {
+          let data = location.state.rooms
+          http
+            .post('booking/unlock-rooms', data)
+            .then(() => {
+              toast.error('Hủy thanh toán!')
+            })
+            .catch(() => {
+              toast.error('Hủy thanh toán!')
+            })
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [count === 0])
+
   return (
-    <div className='main-container'>
-      <div className='rectangle'>
-        <div className='flex-row-cd'>
-          <img className='logo' src='https://mogi.vn/content/Images/logo.svg' alt='mogi' />
-          <div className='ellipse' />
-          <button className='ellipse-5' />
-          <div className='ellipse-6' />
-          <span className='span'>1</span>
-          <span className='info'>2</span>
-          <span className='vector-7'>v</span>
-
-          <div className='vector-7' />
-
-          <div className='rectangle-8' />
-          <div className='rectangle-9' />
+    <div className={cx('paymentInfo_container', 'container')}>
+      <div className={cx('body_container')}>
+        <div className={cx('header_container', 'd-flex')}>
+          <h3 className={cx('timer')} style={{ color: 'red' }}>
+            {count}
+          </h3>
+          <h3 className={cx('flex-1')}>Vui lòng điền thông tin của bạn</h3>
         </div>
-        <div className='flex-row'>
-          <span className='customer-info'>Thông tin khách hàng</span>
-          <span className='payment-details'>Chi tiết thanh toán</span>
-          <span className='confirmed-booking'>Đã xác nhận đặt phòng!</span>
-        </div>
-      </div>
-      <div className='rectangle-a'>
-        <div className='rectangle-b'>
-          <button className='image-btn' />
-          <button className='image-btn-c' />
-          <div className='image' />
-          <div className='image-d' />
-          <div className='rectangle-e' />
-          <span className='credit-debit-card'>CREDIT/DEBIT CARD</span>
-          <div className='group' />
-        </div>
-        <div className='select-payment-method'>
-          <span className='select-payment-method-f'>Select payment method</span>
-          <span className='asterisk'>*</span>
-        </div>
-        <div className='rectangle-10' />
-        <span className='last-step-almost-done'>Last step! You're almost done.</span>
-        <div className='card-holder-name'>
-          <span className='card-holder-name-11'>Card holder name </span>
-          <span className='asterisk-12'>*</span>
-        </div>
-        <div className='rectangle-13' />
-        <div className='credit-debit-card-number'>
-          <span className='credit-debit-card-number-14'>Credit/debit card number </span>
-          <span className='asterisk-15'>*</span>
-        </div>
-        <div className='rectangle-16' />
-        <div className='flex-row-dd'>
-          <div className='expiry-date'>
-            <span className='expiry-date-17'>Expiry date </span>
-            <span className='asterisk-18'>*</span>
+        <div className={cx('fromInput_container', 'row')}>
+          <div className={cx('div-group', 'form-group', 'col-sm-6')}>
+            <h6>
+              Họ và tên(<span className={cx('require')}>*</span>)
+            </h6>
+            <input
+              placeholder='Họ và tên'
+              className={cx('form-control')}
+              type='text'
+              value={customerInfo.fullname}
+              onChange={(e) => setCustomerInfo({ ...customerInfo, fullname: e.target.value })}
+            />
           </div>
-          <div className='cvc-cvv'>
-            <span className='cvc-cvv-19'>CVC/CVV </span>
-            <span className='asterisk-1a'>*</span>
+          <div className={cx('div-group', 'form-group', 'col-sm-6')}>
+            <h6>
+              Email(<span className={cx('require')}>*</span>)
+            </h6>
+            <input
+              placeholder='Email'
+              className={cx('form-control')}
+              type='email'
+              value={customerInfo.email}
+              onChange={(e) => setCustomerInfo({ ...customerInfo, email: e.target.value })}
+            />
+          </div>
+          <div className={cx('div-group', 'form-group', 'col-sm-6')}>
+            <h6>Địa chỉ</h6>
+            <input
+              placeholder='Địa chỉ'
+              className={cx('form-control')}
+              type='text'
+              value={customerInfo.address}
+              onChange={(e) => setCustomerInfo({ ...customerInfo, address: e.target.value })}
+            />
+          </div>
+          <div className={cx('div-group', 'form-group', 'col-sm-6')}>
+            <h6>
+              CCCD(<span className={cx('require')}>*</span>)
+            </h6>
+            <input
+              placeholder='CCCD'
+              className={cx('form-control')}
+              type='text'
+              value={customerInfo.cccd}
+              onChange={(e) => setCustomerInfo({ ...customerInfo, cccd: e.target.value })}
+            />
           </div>
         </div>
-        <div className='flex-row-fa'>
-          <div className='rectangle-1b' />
-          <div className='regroup'>
-            <div className='rectangle-1c' />
-            <div className='image-1d' />
+        <div className={cx('bankInfo_container')}>
+          <h5>Vui lòng thanh toán theo thông tin số tài khoản dưới đây.</h5>
+          <div className={cx('bankInfo_box')}>
+            <h5 className={cx('bank_info')}>Mã hóa đơn: {invoiceId}</h5>
+            <h5 className={cx('bank_info', 'price')}>Số tiền cần thanh toán: {price.toLocaleString('vi-VN')}đ</h5>
+            <h5 className={cx('bank_info')}>Momo: 0949825991</h5>
+            <h5 className={cx('bank_info')}>STK ngân hàng (Agribank): 4605205228342</h5>
+            <h5 className={cx('bank_info', 'account_owner')}>Chủ tài khoản: Lê Anh Tuấn Dũng</h5>
+            <h5 className={cx('bank_info')} style={{ color: 'red' }}>
+              * Vui lòng điền nội dung giao dịch: TTTDC {'{Mã hóa đơn}'}
+            </h5>
           </div>
-        </div>
-      </div>
-      <div className='rectangle-1e'>
-        <div className='proceed-agree-terms'>
-          <span className='proceed-agree-agoda'>By proceeding with this booking, I agree to Agoda’s</span>
-          <span className='empty'> </span>
-          <span className='terms-of-use'>Terms of Use</span>
-          <span className='empty-1f'> </span>
-          <span className='proceed-agree-agoda-20'>and</span>
-          <span className='empty-21'> </span>
-          <span className='privacy-policy'>Privacy Policy</span>
-          <span className='period'>.</span>
-        </div>
-        <div className='rectangle-22'>
-          <span className='book-now'>Book now!</span>
+          <div className={cx('div_btn')}>
+            <button onClick={handleConfirmPayment} className={cx('btn', 'btn-primary')}>
+              Xác nhận thanh toán
+            </button>
+          </div>
         </div>
       </div>
     </div>
   )
 }
 
-export default PaymentInformation
+export default PaymentInfomation

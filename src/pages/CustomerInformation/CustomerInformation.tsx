@@ -1,13 +1,39 @@
 import './CustomerInformation.css'
 import configRoutes from '../../config'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import { useState } from 'react'
+
+interface customerInfo {
+  fullname: string
+  email: string
+  phone: string
+  country: string
+  address: string
+  cccd: string
+}
+
+const initialCustomerInfo: customerInfo = {
+  fullname: 'abc',
+  email: '',
+  phone: '',
+  country: '',
+  address: '',
+  cccd: ''
+}
 
 function CustomerInformation(props: any) {
+  const location = useLocation()
+  const invoiceId = location.state.invoiceId
+  const [customerInfo, setCustomerInfo] = useState<customerInfo>(initialCustomerInfo)
+  let price = location.state.totalAmount
+
   return (
     <div className='main-container'>
       <div className='rectangle'>
         <div className='flex-row'>
-          <img className='logo' src='https://mogi.vn/content/Images/logo.svg' alt='mogi' />
+          <Link to={configRoutes.routes.home}>
+            <img className='logo' src='https://mogi.vn/content/Images/logo.svg' alt='mogi' />
+          </Link>
           <div className='ellipse' />
           <div className='ellipse-5' />
           <div className='ellipse-6' />
@@ -32,14 +58,23 @@ function CustomerInformation(props: any) {
           <span className='passport-name-c'>Họ và tên như trên hộ chiếu </span>
           <span className='required'>*</span>
         </div>
-        <input type='text' className='rectangle-d' />
-
+        <input
+          value={customerInfo.fullname}
+          onChange={(e) => setCustomerInfo({ ...customerInfo, fullname: e.target.value })}
+          type='text'
+          className='rectangle-d'
+        />
         <div className='email-input'>
           <span className='email-label'>Email</span>
           <span className='empty-space'> </span>
           <span className='required-sign'>*</span>
         </div>
-        <input type='text' className='rectangle-n' />
+        <input
+          value={customerInfo.email}
+          onChange={(e) => setCustomerInfo({ ...customerInfo, email: e.target.value })}
+          type='email'
+          className='rectangle-n'
+        />
         <span className='reminder-text'>
           Nếu quý khách nhập địa chỉ thư điện tử và không hoàn thành việc đặt phòng thì chúng tôi có thể nhắc nhở để
           giúp quý khách tiếp tục đặt phòng.
@@ -50,30 +85,48 @@ function CustomerInformation(props: any) {
           </div>
           <div className='country-input'>
             <span className='country-label'>Quốc gia cư trú</span>
-            <span className='required-sign-10'>*</span>
+            <span className='required-sign-10'>(*)</span>
           </div>
         </div>
         <div className='flex-row-11'>
           <input type='text' className='rectangle-12' />
           <input type='text' className='rectangle-13' />
         </div>
-        <span className='cung-cap'>
-          Các yêu cầu còn lệ thuộc vào khả năng cung cấp. Chúng tôi sẽ gửi các yêu cầu của quý khách ngay sau khi quý
-          khách đặt phòng.
-        </span>
+        <div className='flex-row-f'>
+          <div className='country-input'>
+            <span className='phone-input'>Địa chỉ (không bắt buộc)</span>
+          </div>
+          <div className='country-input'>
+            <span className='country-label'>CCCD</span>
+            <span className='required-sign-10'>(*)</span>
+          </div>
+        </div>
+        <div className='flex-row-11'>
+          <input type='text' className='rectangle-12' />
+          <input type='text' className='rectangle-13' />
+        </div>
+        <span className='cung-cap'>Vui lòng thành toán theo thông tin số tài khoản dưới đây.</span>
         <div className='rectangle-14'>
-          <span className='hut-thuoc'>Quy định hút thuốc (nếu có phòng):</span>
+          <span className='hut-thuoc' style={{ color: 'red', fontWeight: '600' }}>
+            Số tiền cần thanh toán: {price.toLocaleString('vi-VN')}đ
+          </span>
+          <span className='hut-thuoc' style={{ fontWeight: '350' }}>
+            Momo: 0949825991
+          </span>
+          <span className='hut-thuoc' style={{ fontWeight: '350' }}>
+            STK (Agribank): 0949825991
+          </span>
 
-          <input type='checkbox' className='rectangle-16' />
+          {/* <input type='checkbox' className='rectangle-16' /> */}
 
-          <span className='phong-hut-thuoc'>Phòng hút thuốc</span>
-          <span className='chon-loai-giuong'>Chọn loại giường (nếu có phòng):</span>
-          <div className='frame-17'>
+          <span className='phong-hut-thuoc'>Chủ tài khoản: Lê Anh Tuấn Dũng</span>
+          {/* <span className='chon-loai-giuong'>Chọn loại giường (nếu có phòng):</span> */}
+          {/* <div className='frame-17'>
             <div className='group-18'>
               <input type='checkbox' className='rectangle-19' />
             </div>
             <span className='non-smoking-room'>Tôi muốn lấy giường lớn</span>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className='rectangle-1a'>
@@ -86,7 +139,7 @@ function CustomerInformation(props: any) {
         </div>
         <span className='confirm-booking'>Có liền xác nhận đặt phòng!</span>
         <button className='rectangle-1d' />
-        <span className='next-step'>KẾ TIẾP: BƯỚC CUỐI CÙNG</span>
+        <span className='next-step'>XÁC NHẬN THANH TOÁN</span>
       </div>
     </div>
   )

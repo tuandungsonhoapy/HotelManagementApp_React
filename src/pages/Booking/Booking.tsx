@@ -32,9 +32,13 @@ const Booking = () => {
     }
     disPatch(booking({ roomId: room.id, startDate, endDate }))
       .unwrap()
-      .then(() => {
-        toast.success('Đặt phòng thành công!')
-        navigation(configRoutes.routes.paymentInvoice)
+      .then((response: any) => {
+        if (response.code === 0) {
+          toast.success('Đặt phòng thành công!')
+          navigation(configRoutes.routes.paymentInvoice)
+        } else {
+          toast.error(response.message)
+        }
       })
       .catch((error) => {
         toast.error('Đặt phòng thất bại!')

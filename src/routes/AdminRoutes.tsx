@@ -1,8 +1,11 @@
 //Pages
-import Booking from 'pages/Booking'
-import Invoice from 'pages/Invoice'
-import InvoiceInfo from 'pages/InvoiceInfo'
-import PaymentInformation from 'pages/PaymentInformation'
+import UserManagementPage from 'pages/UserManagement'
+import RoleManagement from 'pages/RoleManagement'
+import RoomManagement from 'pages/RoomManagement'
+import RoomCategory from 'pages/RoomCategory'
+import GroupRole from 'pages/GroupRole'
+import InvoiceManagement from 'pages/InvoiceManagement'
+import InvoiceInfoAdmin from 'pages/InvoiceInfoAdmin'
 
 //Layouts
 import { DefaultLayoutProps } from 'interfaces/layout.interface'
@@ -28,13 +31,16 @@ interface privateRoute {
 type typePrivateRoutes = privateRoute[]
 
 const privateRoutes: typePrivateRoutes = [
-  { path: config.routes.booking, component: Booking, layout: DefaultLayout },
-  { path: config.routes.paymentInvoice, component: Invoice, layout: DefaultLayout },
-  { path: config.routes.paymentinformation, component: PaymentInformation, layout: DefaultLayout },
-  { path: config.routes.invoiceInfo, component: InvoiceInfo, layout: DefaultLayout }
+  { path: config.routes.user, component: UserManagementPage, layout: AdminLayout },
+  { path: config.routes.role, component: RoleManagement, layout: AdminLayout },
+  { path: config.routes.roomManagement, component: RoomManagement, layout: AdminLayout },
+  { path: config.routes.roomCategory, component: RoomCategory, layout: AdminLayout },
+  { path: config.routes.groupRole, component: GroupRole, layout: AdminLayout },
+  { path: config.routes.invoiceManagement, component: InvoiceManagement, layout: AdminLayout },
+  { path: config.routes.invoiceInfoAdmin, component: InvoiceInfoAdmin, layout: AdminLayout }
 ]
 
-const PrivateRoutes = () => {
+const AdminRoutes = () => {
   const navigate = useNavigate()
   const currentUser = useSelector((state: RootState) => state.auth.user)
 
@@ -43,6 +49,10 @@ const PrivateRoutes = () => {
       if (currentUser.isAuthenticated === false) {
         navigate(-1)
         toast.error('Bạn cần đăng nhập để truy cập trang này')
+      }
+      if (currentUser.groupWithRoles.id === 1) {
+        navigate(-1)
+        toast.error('Bạn không có quyền truy cập trang này')
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -75,4 +85,4 @@ const PrivateRoutes = () => {
   )
 }
 
-export default PrivateRoutes
+export default AdminRoutes

@@ -44,7 +44,7 @@ function HomePage(props: any) {
   const renderSingleRooms = () => {
     return (
       <>
-        {singleRoomsList.map((item) => {
+        {singleRoomsList.slice(0, 5).map((item) => {
           return <RealEstateItem key={item.id} room={item} />
         })}
       </>
@@ -54,7 +54,7 @@ function HomePage(props: any) {
   const renderDoubleRooms = () => {
     return (
       <>
-        {doubleRoomsList.map((item) => {
+        {doubleRoomsList.slice(0, 5).map((item) => {
           return <RealEstateItem key={item.id} room={item} />
         })}
       </>
@@ -64,7 +64,7 @@ function HomePage(props: any) {
   const renderCoupleRooms = () => {
     return (
       <>
-        {coupleRoomsList.map((item) => {
+        {coupleRoomsList.slice(0, 5).map((item) => {
           return <RealEstateItem key={item.id} room={item} />
         })}
       </>
@@ -75,11 +75,11 @@ function HomePage(props: any) {
     <div className={cx('homePage_container')}>
       <div className={cx('desktop')}>
         <div className={cx('mg-1170-container', 'ng-scope')}>
-          <h1 className={cx('title')}>An tâm chọn, An tâm mua</h1>
+          <h1 className={cx('title')}>An tâm chọn, An tâm thuê</h1>
           <div className={cx('search-bar')}>
             <ul className={cx('options-list')}>
-              <li>Mua</li>
-              <li>Thuê</li>
+              <li>Phòng</li>
+              <li>Loại phòng</li>
             </ul>
             <div className={cx('search_container')}>
               <Search />

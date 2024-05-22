@@ -5,6 +5,8 @@ import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import { useEffect, useState } from 'react'
 import http from 'Utils/httpRequest'
+import { useNavigate } from 'react-router-dom'
+import configRoutes from '../../config'
 
 const cx = classNames.bind(styles)
 
@@ -14,28 +16,40 @@ interface interfaceInvoice {
   totalAmount: number
   note: string
   userId: number
+  payments: number
 }
 
 const Invoice = () => {
   const [invoices, setInvoices] = useState<interfaceInvoice[]>([])
 
+  const navigate = useNavigate()
+
+  const handleShowInvoiceDetail = (invoiceId: number) => {
+    navigate(configRoutes.routes.invoiceInfo, { state: { invoiceId } })
+  }
+
   const renderInvoices = () => {
     return invoices.map((invoice, index) => {
       return (
-        <tr>
+        <tr key={invoice.id}>
           <th scope='row'>{index + 1}</th>
           <td>{invoice.id}</td>
-          <td>{invoice.totalAmount}</td>
+          <td>{invoice.totalAmount.toLocaleString('vi-VN')}đ</td>
+          <td>{invoice.payments.toLocaleString('vi-VN')}đ</td>
           {invoice.status === 0 ? (
-            <td className={cx('text-warning')}>Chưa thanh toán</td>
-          ) : invoice.status === 1 ? (
-            <td className={cx('text-success')}>Đã thanh toán</td>
+            <td className={cx('text-danger')}>Chưa thanh toán đặt cọc</td>
           ) : (
-            <td className={cx('text-danger')}>Cần thanh toán tiền đặt cọc</td>
+            <td className={cx('text-success')}>Đã thanh toán đặt cọc</td>
           )}
           <td>
-            <button className={cx('btn', 'btn-primary', 'mr-3')}>Thông tin chi tiết</button>
-            <button className={cx('btn', 'btn-success')}>Thanh toán</button>
+            <button onClick={() => handleShowInvoiceDetail(invoice.id)} className={cx('btn', 'btn-primary', 'mr-3')}>
+              Thông tin chi tiết
+            </button>
+            {(invoice.status === 0 || invoice.status === 1) && (
+              <>
+                <button className={cx('btn', 'btn-danger')}>Hủy</button>
+              </>
+            )}
           </td>
         </tr>
       )
@@ -64,7 +78,8 @@ const Invoice = () => {
             <tr>
               <th scope='col'>STT</th>
               <th scope='col'>Mã hóa đơn</th>
-              <th scope='col'>Tổng tiền</th>
+              <th scope='col'>Tổng tiền hóa đơn</th>
+              <th scope='col'>Tổng tiền thanh toán</th>
               <th scope='col'>Trạng thái</th>
               <th scope='col'></th>
             </tr>
