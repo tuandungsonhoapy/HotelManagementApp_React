@@ -38,6 +38,8 @@ const Invoice = () => {
           <td>{invoice.payments.toLocaleString('vi-VN')}đ</td>
           {invoice.status === 0 ? (
             <td className={cx('text-danger')}>Chưa thanh toán đặt cọc</td>
+          ) : invoice.status === -1 ? (
+            <td className={cx('text-danger')}>Đã bị hủy</td>
           ) : (
             <td className={cx('text-success')}>Đã thanh toán đặt cọc</td>
           )}

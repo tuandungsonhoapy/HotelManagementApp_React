@@ -81,6 +81,19 @@ const InvoiceInfoAdmin = () => {
       })
   }
 
+  const handleRejectPayment = () => {
+    http
+      .put('invoice/reject-pay-deposit', { invoiceId: invoiceId })
+      .then((res) => {
+        if (res.status === 200) {
+          fetchInvoice()
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message)
+      })
+  }
+
   const fetchInvoice = () => {
     http.get('booking/by-invoice', { params: { invoiceId: invoiceId } }).then((res) => {
       setInvoice(res.data)
@@ -108,7 +121,9 @@ const InvoiceInfoAdmin = () => {
                 ? 'Chưa thanh toán đặt cọc'
                 : invoice.status === 1
                   ? 'Chờ xác nhận thanh toán đặt cọc'
-                  : 'Đã thanh toán đặt cọc'}
+                  : invoice.status === -1
+                    ? 'Hóa đơn đã bị hủy'
+                    : 'Đã thanh toán đặt cọc'}
             </p>
             <p>Ghi chú: {invoice.note}</p>
           </div>
@@ -135,6 +150,8 @@ const InvoiceInfoAdmin = () => {
               </h4>
             ) : invoice.status === 1 ? (
               <h4 style={{ fontWeight: '600', color: 'red' }}>Chờ xác nhận thanh toán đặt cọc!</h4>
+            ) : invoice.status === -1 ? (
+              <h4 style={{ fontWeight: '600', color: 'red' }}>Hóa đơn đã bị hủy!</h4>
             ) : (
               <h4 style={{ fontWeight: '600', color: 'green' }}>Đã thanh toán tiền đặt cọc!</h4>
             )}
@@ -149,7 +166,11 @@ const InvoiceInfoAdmin = () => {
               Xác nhận đặt cọc
             </button>
           )}
-          {(invoice.status === 0 || invoice.status === 1) && <button className={cx('btn', 'btn-danger')}>Hủy</button>}
+          {(invoice.status === 0 || invoice.status === 1) && (
+            <button onClick={handleRejectPayment} className={cx('btn', 'btn-danger')}>
+              Hủy
+            </button>
+          )}
         </div>
       </div>
     </div>

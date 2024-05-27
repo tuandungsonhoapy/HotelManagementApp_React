@@ -1,56 +1,113 @@
 import classNames from 'classnames/bind'
 import styles from './RoomDirectory.module.scss'
-import ButtonReact from './components/ButtonReact'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserGroup } from '@fortawesome/free-solid-svg-icons'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import http from 'Utils/httpRequest'
+import { toast } from 'react-toastify'
+import { set } from 'lodash'
 
 const cx = classNames.bind(styles)
 
-interface Client {
-  room: number
-  adult: number
-  child: number
+interface interfaceCategory {
+  id: number
+  categoryName: string
+  description: string
 }
 
-const initialClients: Client = {
-  room: 1,
-  adult: 1,
-  child: 1
+interface interfaceOption {
+  checkIn: string
+  checkOut: string
+  categoryId: number
+}
+
+const initialOption: interfaceOption = {
+  checkIn: '',
+  checkOut: '',
+  categoryId: 0
+}
+
+interface interfaceRoom {
+  id: number
+  roomNumber: string
+  status: number
+  price: number
+  categoryId: number
+  image: string
+  description: string
 }
 
 const RoomDirectory = () => {
-  const [showRoomSelectionForm, setShowRoomSelectionForm] = useState<boolean>(false)
-  const [clients, setClients] = useState<Client>(initialClients)
+  const [categories, setCategories] = useState<interfaceCategory[]>([])
+  const [option, setOption] = useState<interfaceOption>(initialOption)
+  const [rooms, setRooms] = useState<interfaceRoom[]>([])
 
-  const handleIncreaseRoom = () => {
-    if (clients.room >= 100) return
-    setClients((prev) => ({ ...prev, room: prev.room + 1 }))
+  const renderCategories = () => {
+    return categories.map((category, index) => {
+      return (
+        <option key={category.id} value={category.id}>
+          {category.description}
+        </option>
+      )
+    })
   }
 
-  const handleDecreaseRoom = () => {
-    if (clients.room <= 1) return
-    setClients((prev) => ({ ...prev, room: prev.room - 1 }))
+  const renderRooms = () => {
+    return rooms.map((room, index) => {
+      return (
+        <div key={room.id} className={cx('col-lg-5', 'col-12', 'room_list_item')}>
+          <div className={cx('room_list_item_img_container')}>
+            <img src={room.image} alt='image_test' className={cx('room_list_item_img')} />
+          </div>
+          <div className={cx('room_list_item_detail_container')}>
+            <div className={cx('room_list_item_title')}>
+              <span>Phòng {room.roomNumber}</span>
+            </div>
+            <div className={cx('room_list_item_detail')}>
+              <span>{room.description || ''}</span>
+            </div>
+            <div className={cx('room_list_item_price')}>
+              <span>{room.price.toLocaleString('vi-VN')}đ</span>
+            </div>
+          </div>
+        </div>
+      )
+    })
   }
 
-  const handleIncreaseAdult = () => {
-    if (clients.adult >= 100) return
-    setClients((prev) => ({ ...prev, adult: prev.adult + 1 }))
-  }
+  useEffect(() => {
+    http
+      .get('categories')
+      .then((res) => {
+        setCategories(res.data)
+        setOption({ ...option, categoryId: res.data[0].id })
+      })
+      .catch((err) => {
+        toast.error(err.message)
+      })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  const handleDecreaseAdult = () => {
-    if (clients.adult <= 1) return
-    setClients((prev) => ({ ...prev, adult: prev.adult - 1 }))
-  }
-
-  const handleIncreaseChild = () => {
-    if (clients.child >= 100) return
-    setClients((prev) => ({ ...prev, child: prev.child + 1 }))
-  }
-
-  const handleDecreaseChild = () => {
-    if (clients.child <= 1) return
-    setClients((prev) => ({ ...prev, child: prev.child - 1 }))
+  const handleFindEmptyRoom = () => {
+    if (option.checkIn === '' || option.checkOut === '') {
+      toast.error('Vui lòng chọn ngày nhận và trả phòng')
+      return
+    }
+    if (option.checkIn >= option.checkOut) {
+      toast.error('Ngày trả phòng phải lớn hơn ngày nhận phòng')
+      return
+    }
+    if (option.checkIn < new Date().toISOString().slice(0, 16)) {
+      toast.error('Ngày nhận phòng phải lớn hơn hoặc bằng ngày hiện tại')
+      return
+    }
+    http
+      .get('room/empty-by-option', { params: option })
+      .then((res) => {
+        setRooms(res.data)
+        console.log(res.data)
+      })
+      .catch((err) => {
+        toast.error(err.message)
+      })
   }
 
   return (
@@ -69,7 +126,14 @@ const RoomDirectory = () => {
               </label>
             </div>
             <div>
-              <input type='date' name='nhan_phong' id='nhan_phong' className={cx('day_selection_input')} />
+              <input
+                onChange={(e) => setOption({ ...option, checkIn: e.target.value })}
+                value={option.checkIn}
+                type='datetime-local'
+                name='nhan_phong'
+                id='nhan_phong'
+                className={cx('day_selection_input')}
+              />
             </div>
           </div>
           <div className={cx('col-lg-3', 'col-5', 'day_selection_item')}>
@@ -79,10 +143,33 @@ const RoomDirectory = () => {
               </label>
             </div>
             <div>
-              <input type='date' name='tra_phong' id='tra_phong' className={cx('day_selection_input')} />
+              <input
+                onChange={(e) => setOption({ ...option, checkOut: e.target.value })}
+                value={option.checkOut}
+                type='datetime-local'
+                name='tra_phong'
+                id='tra_phong'
+                className={cx('day_selection_input')}
+              />
             </div>
           </div>
-          <div className={cx('col-lg-3', 'col-10', 'day_selection_item')}>
+          <div className={cx('col-lg-3', 'col-5', 'day_selection_item')}>
+            <div>
+              <label htmlFor='tra_phong' className={cx('day_selection_label')}>
+                Loại phòng
+              </label>
+            </div>
+            <div>
+              <select
+                value={option.categoryId}
+                onChange={(e) => setOption({ ...option, categoryId: parseInt(e.target.value) })}
+                className={cx('day_selection_input')}
+              >
+                {renderCategories()}
+              </select>
+            </div>
+          </div>
+          {/* <div className={cx('col-lg-3', 'col-10', 'day_selection_item')}>
             <div>
               <span className={cx('day_selection_label')}>Khách</span>
             </div>
@@ -147,12 +234,17 @@ const RoomDirectory = () => {
                 </form>
               </div>
             )}
-          </div>
+          </div> */}
+        </div>
+        <div className={cx('mt-3', 'd-flex', 'align-items-center', 'justify-content-center')}>
+          <button onClick={handleFindEmptyRoom} className={cx('btn', 'btn-primary')}>
+            Tìm phòng
+          </button>
         </div>
       </div>
       <div className={cx('col-lg-10', 'col-11', 'room_list')}>
         <div className={cx('room_list_title')}>
-          <span>Danh sách phòng</span>
+          <span>Danh sách phòng trống</span>
         </div>
         <div className={cx('row', 'room_list_sort_container')}>
           <div className={cx('col-auto', 'room_list_sort_span')}>
@@ -164,92 +256,10 @@ const RoomDirectory = () => {
                 Giá thấp đến cao
               </option>
               <option value={2}>Giá cao dến thấp</option>
-              <option value={3}>Đặt nhiều nhất</option>
             </select>
           </div>
         </div>
-        <div className={cx('row', 'room_list_container')}>
-          <div className={cx('col-lg-5', 'col-12', 'room_list_item')}>
-            <div className={cx('room_list_item_img_container')}>
-              <img
-                src='https://cf.bstatic.com/xdata/images/hotel/max1024x768/78667432.jpg?k=7c525275216830e24ab2f759d093d83aed7348ac2d38a7cd8788ff3aa91ac069&o=&hp=1'
-                alt='image_test'
-                className={cx('room_list_item_img')}
-              />
-            </div>
-            <div className={cx('room_list_item_detail_container')}>
-              <div className={cx('room_list_item_title')}>
-                <span>Goldient Boutique Hotel</span>
-              </div>
-              <div className={cx('room_list_item_detail')}>
-                <span>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minima, fuga.</span>
-              </div>
-              <div className={cx('room_list_item_price')}>
-                <span>1.000.000</span>
-              </div>
-            </div>
-          </div>
-          <div className={cx('col-lg-5', 'col-12', 'room_list_item')}>
-            <div className={cx('room_list_item_img_container')}>
-              <img
-                alt='img_test'
-                className={cx('room_list_item_img')}
-                src='https://cf.bstatic.com/xdata/images/hotel/max1024x768/78667432.jpg?k=7c525275216830e24ab2f759d093d83aed7348ac2d38a7cd8788ff3aa91ac069&o=&hp=1'
-              />
-            </div>
-            <div className={cx('room_list_item_detail_container')}>
-              <div className={cx('room_list_item_title')}>
-                <span>Goldient Boutique Hotel</span>
-              </div>
-              <div className={cx('room_list_item_detail')}>
-                <span>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minima, fuga.</span>
-              </div>
-              <div className={cx('room_list_item_price')}>
-                <span>1.000.000</span>
-              </div>
-            </div>
-          </div>
-          <div className={cx('col-lg-5', 'col-12', 'room_list_item')}>
-            <div className={cx('room_list_item_img_container')}>
-              <img
-                alt='img'
-                className={cx('room_list_item_img')}
-                src='https://cf.bstatic.com/xdata/images/hotel/max1024x768/78667432.jpg?k=7c525275216830e24ab2f759d093d83aed7348ac2d38a7cd8788ff3aa91ac069&o=&hp=1'
-              />
-            </div>
-            <div className={cx('room_list_item_detail_container')}>
-              <div className={cx('room_list_item_title')}>
-                <span>Goldient Boutique Hotel</span>
-              </div>
-              <div className={cx('room_list_item_detail')}>
-                <span>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minima, fuga.</span>
-              </div>
-              <div className={cx('room_list_item_price')}>
-                <span>1.000.000</span>
-              </div>
-            </div>
-          </div>
-          <div className={cx('col-lg-5', 'col-12', 'room_list_item')}>
-            <div className={cx('room_list_item_img_container')}>
-              <img
-                alt='img'
-                className={cx('room_list_item_img')}
-                src='https://cf.bstatic.com/xdata/images/hotel/max1024x768/78667432.jpg?k=7c525275216830e24ab2f759d093d83aed7348ac2d38a7cd8788ff3aa91ac069&o=&hp=1'
-              />
-            </div>
-            <div className={cx('room_list_item_detail_container')}>
-              <div className={cx('room_list_item_title')}>
-                <span>Goldient Boutique Hotel</span>
-              </div>
-              <div className={cx('room_list_item_detail')}>
-                <span>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minima, fuga.</span>
-              </div>
-              <div className={cx('room_list_item_price')}>
-                <span>1.000.000</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div className={cx('row', 'room_list_container')}>{renderRooms()}</div>
       </div>
     </div>
   )

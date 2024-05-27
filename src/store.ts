@@ -5,13 +5,15 @@ import authReducer from 'pages/auth.slice'
 import roomReducer from 'pages/RoomManagement/room.slice'
 import bookingReducer from 'pages/booking.slice'
 import { httpObject } from 'Utils/httpRequest'
+import serviceReducer from 'pages/ServiceManagement/service.slice'
 
 export const store = configureStore({
   reducer: {
     blog: blogReducer,
     auth: authReducer,
     room: roomReducer,
-    booking: bookingReducer
+    booking: bookingReducer,
+    service: serviceReducer
   }
 })
 

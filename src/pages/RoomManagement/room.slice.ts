@@ -92,6 +92,9 @@ export const roomSlice = createSlice({
         categoryId: 0,
         image: ''
       }
+    },
+    setDescription: (state, action: PayloadAction<string>) => {
+      state.room.description = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -125,8 +128,17 @@ export const roomSlice = createSlice({
   }
 })
 
-export const { setRooms, setRoom, setPrice, setImage, setCategoryId, setRoomNumber, setRoomStatus, setDefaultRoom } =
-  roomSlice.actions
+export const {
+  setRooms,
+  setRoom,
+  setPrice,
+  setImage,
+  setCategoryId,
+  setRoomNumber,
+  setRoomStatus,
+  setDefaultRoom,
+  setDescription
+} = roomSlice.actions
 
 const roomReducer = roomSlice.reducer
 

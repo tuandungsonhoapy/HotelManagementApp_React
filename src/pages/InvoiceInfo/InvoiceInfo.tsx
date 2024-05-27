@@ -21,6 +21,7 @@ const initialInvoice: interfaceInvoice = {
 }
 
 interface interfaceBooking {
+  id: number
   checkIn: string
   checkOut: string
   price: number
@@ -36,6 +37,7 @@ interface interfaceRoom {
 const InvoiceInfo = () => {
   const location = useLocation()
   const invoiceId = location.state.invoiceId
+  const note = location.state.note
   const [invoice, setInvoice] = useState<interfaceInvoice>(initialInvoice)
   const [rooms, setRooms] = useState<interfaceRoom[]>([])
 
@@ -43,12 +45,23 @@ const InvoiceInfo = () => {
 
   const totalAmount = rooms.reduce((total, room) => total + room.Booking.price, 0)
 
-  useEffect(() => {
+  const fetchInvoice = () => {
     http.get('booking/by-invoice', { params: { invoiceId: invoiceId } }).then((res) => {
       setInvoice(res.data)
       setRooms(res.data.Rooms)
     })
+  }
+
+  useEffect(() => {
+    fetchInvoice()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [invoiceId])
+
+  const handleDeleteBooking = (id: number) => {
+    http.delete('booking/delete', { params: { id: id } }).then(() => {
+      fetchInvoice()
+    })
+  }
 
   const renderBookings = () => {
     return rooms.map((room, index) => {
@@ -65,20 +78,18 @@ const InvoiceInfo = () => {
           <td>{formatted_checkOut}</td>
           <td>{room.price.toLocaleString('vi-VN')}đ</td>
           <td>{room.Booking.price.toLocaleString('vi-VN')}đ</td>
+          <td>
+            <button onClick={() => handleDeleteBooking(room.Booking.id)} className={cx('btn', 'btn-danger')}>
+              Xóa
+            </button>
+          </td>
         </tr>
       )
     })
   }
 
   const handleClickpayDeposit = () => {
-    http
-      .post('booking/block-rooms', rooms)
-      .then(() => {
-        navigation(configRoutes.routes.paymentinformation, { state: { invoiceId, totalAmount, rooms } })
-      })
-      .catch(() => {
-        alert('Đã có lỗi xảy ra')
-      })
+    navigation(configRoutes.routes.paymentinformation, { state: { invoiceId, totalAmount, rooms } })
   }
 
   return (
@@ -95,7 +106,9 @@ const InvoiceInfo = () => {
               ? 'Chưa thanh toán đặt cọc'
               : invoice.status === 1
                 ? 'Chờ xác nhận thanh toán đặt cọc'
-                : 'Đã thanh toán đặt cọc'}
+                : invoice.status === -1
+                  ? 'Đã bị hủy'
+                  : 'Đã thanh toán đặt cọc'}
           </p>
           <p>Ghi chú: {invoice.note}</p>
         </div>
@@ -110,6 +123,7 @@ const InvoiceInfo = () => {
                 <th scope='col'>Check Out</th>
                 <th scope='col'>Tiền phòng</th>
                 <th scope='col'>Tiền đặt cọc</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>{renderBookings()}</tbody>
@@ -117,18 +131,27 @@ const InvoiceInfo = () => {
         </div>
         <div>
           {invoice.status === 0 ? (
-            <h4 style={{ fontWeight: '600', color: 'red' }}>
-              Tổng tiền đặt cọc cần thanh toán: {totalAmount.toLocaleString('vi-VN')}đ
-            </h4>
+            <>
+              <h4 style={{ fontWeight: '600', color: 'red' }}>
+                {note || `Tổng tiền đặt cọc cần thanh toán: ${totalAmount.toLocaleString('vi-VN')}đ`}
+              </h4>
+              {note && (
+                <h4 style={{ fontWeight: '600', color: 'red' }}>
+                  Vui lòng đợi các phòng hoàn tất thanh toán hoặc chọn phòng khác!
+                </h4>
+              )}
+            </>
           ) : invoice.status === 1 ? (
             <h4 style={{ fontWeight: '600', color: 'red' }}>Chờ xác nhận thanh toán đặt cọc!</h4>
+          ) : invoice.status === -1 ? (
+            <h4 style={{ fontWeight: '600', color: 'red' }}>Đã bị hủy (Chưa thanh toán tiền đặt cọc)!</h4>
           ) : (
             <h4 style={{ fontWeight: '600', color: 'green' }}>Đã thanh toán tiền đặt cọc!</h4>
           )}
 
           <button
             disabled={invoice.status === 1}
-            hidden={invoice.status === 1}
+            hidden={invoice.status === 1 || invoice.status === -1}
             style={{ fontWeight: '500' }}
             onClick={handleClickpayDeposit}
             className={cx('btn', 'btn-primary')}

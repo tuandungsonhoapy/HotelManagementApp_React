@@ -16,7 +16,8 @@ import {
   setImage,
   setCategoryId,
   setRoomStatus,
-  setDefaultRoom
+  setDefaultRoom,
+  setDescription
 } from 'pages/RoomManagement/room.slice'
 
 const cx = classNames.bind(styles)
@@ -231,6 +232,15 @@ function RoomModal({ title, showModal, handleHileModal, action, handleCreateRoom
               <select value={room.categoryId} className={cx('form-select')} onChange={handleChangeCategoryInput}>
                 {renderCategoryList()}
               </select>
+            </div>
+            <div className={cx('col-6', 'form-group', 'mb-3')}>
+              <input
+                placeholder='Mô tả'
+                className={cx('form-control')}
+                type='text'
+                value={room.description || ''}
+                onChange={(e) => disPatch(setDescription(e.target.value))}
+              />
             </div>
           </div>
         </div>

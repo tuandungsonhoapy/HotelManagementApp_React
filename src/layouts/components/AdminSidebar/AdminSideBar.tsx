@@ -19,11 +19,11 @@ const AdminSidebar = () => {
         <li>
           <Link to={routesConfig.routes.invoiceManagement}>Quản lý hóa đơn</Link>
         </li>
-        <li>
+        {/* <li>
           <Link to='/manage-employees'>Quản lý nhân viên</Link>
-        </li>
+        </li> */}
         <li>
-          <Link to='/manage-services'>Quản lý dịch vụ</Link>
+          <Link to={routesConfig.routes.serviceManagement}>Quản lý dịch vụ</Link>
         </li>
       </ul>
     </div>

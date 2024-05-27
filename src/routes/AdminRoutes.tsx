@@ -6,6 +6,7 @@ import RoomCategory from 'pages/RoomCategory'
 import GroupRole from 'pages/GroupRole'
 import InvoiceManagement from 'pages/InvoiceManagement'
 import InvoiceInfoAdmin from 'pages/InvoiceInfoAdmin'
+import ServiceManagement from 'pages/ServiceManagement'
 
 //Layouts
 import { DefaultLayoutProps } from 'interfaces/layout.interface'
@@ -37,7 +38,8 @@ const privateRoutes: typePrivateRoutes = [
   { path: config.routes.roomCategory, component: RoomCategory, layout: AdminLayout },
   { path: config.routes.groupRole, component: GroupRole, layout: AdminLayout },
   { path: config.routes.invoiceManagement, component: InvoiceManagement, layout: AdminLayout },
-  { path: config.routes.invoiceInfoAdmin, component: InvoiceInfoAdmin, layout: AdminLayout }
+  { path: config.routes.invoiceInfoAdmin, component: InvoiceInfoAdmin, layout: AdminLayout },
+  { path: config.routes.serviceManagement, component: ServiceManagement, layout: AdminLayout }
 ]
 
 const AdminRoutes = () => {

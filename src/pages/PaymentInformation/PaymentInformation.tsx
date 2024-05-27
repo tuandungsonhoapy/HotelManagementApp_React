@@ -97,6 +97,15 @@ const PaymentInfomation = () => {
   }, [])
 
   useEffect(() => {
+    http.get('invoice/check-invoice', { params: { invoiceId: invoiceId } }).then((res: any) => {
+      if (res.code === 1) {
+        navigate(configRoutes.routes.invoiceInfo, { state: { invoiceId, note: res.message } })
+        paymentStatus.current = true
+      }
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [invoiceId])
+  useEffect(() => {
     if (count === 0) {
       timeUp.current = true
       navigate(configRoutes.routes.home)
