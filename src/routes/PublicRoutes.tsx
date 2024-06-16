@@ -6,6 +6,8 @@ import Register from 'pages/Register'
 import RoomDirectory from '../pages/roomDirectory'
 import ProductDetail from 'pages/ProductDetail'
 import CustomerInformation from 'pages/CustomerInformation'
+import ServiceList from 'pages/ServiceList'
+
 //Layouts
 import DefaultLayout from 'layouts/DefaultLayout'
 import SemiLayout from 'layouts/SemiLayout'
@@ -31,7 +33,8 @@ const publicRoutes: typePublicRoutes = [
   { path: config.routes.register, component: Register },
   { path: config.routes.danhMucPhong, component: RoomDirectory, layout: DefaultLayout },
   { path: config.routes.customerinformation, component: CustomerInformation, layout: SemiLayout },
-  { path: config.routes.productDetail, component: ProductDetail, layout: DefaultLayout }
+  { path: config.routes.productDetail, component: ProductDetail, layout: DefaultLayout },
+  { path: config.routes.services, component: ServiceList, layout: DefaultLayout }
 ]
 
 const PublicRoutes = () => {

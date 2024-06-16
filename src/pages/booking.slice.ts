@@ -8,9 +8,16 @@ type PendingAction = ReturnType<GenericAsyncThunk['pending']>
 type RejectedAction = ReturnType<GenericAsyncThunk['rejected']>
 type FulfilledAction = ReturnType<GenericAsyncThunk['fulfilled']>
 
+interface BookingState {
+  roomId: number
+  startDate: Date
+  endDate: Date
+}
+
 interface RoomState {
   rooms: interfaceRoom[]
   room: interfaceRoom
+  booking: BookingState
 }
 
 const initialState: RoomState = {
@@ -22,6 +29,11 @@ const initialState: RoomState = {
     price: 0,
     categoryId: 0,
     image: ''
+  },
+  booking: {
+    roomId: 0,
+    startDate: new Date(),
+    endDate: new Date()
   }
 }
 

@@ -9,24 +9,12 @@ import ReactPaginate from 'react-paginate'
 import ConfirmModal from 'components/Modal'
 import RoomModal from './components/Modal'
 import { RootState, useAppDispatch } from 'store'
-import { Link } from 'react-router-dom'
 import configRoutes from '../../config'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHouse } from '@fortawesome/free-solid-svg-icons'
 import { useDebounce } from 'hooks'
 import { useSelector } from 'react-redux'
-import {
-  setService,
-  setDefaultService,
-  setServiceName,
-  setDescription,
-  setPrice,
-  Service,
-  getServices,
-  createService,
-  updateService
-} from './service.slice'
-import { get, set } from 'lodash'
+import { setService, Service, getServices, createService, updateService } from './service.slice'
 
 const cx = classNames.bind(styles)
 
@@ -265,11 +253,8 @@ const RoomManagement = () => {
       <div className={cx('container', 'header_content', 'd-flex', 'justify-content-between')}>
         <div className={cx('container')}>
           <button onClick={handleClickCreateRoom} className={cx('btn btn-success mt-2 mr-3 mb-2')}>
-            Thêm mới phòng <FontAwesomeIcon icon={faHouse} />
+            Thêm mới dịch vụ
           </button>
-          <Link className={cx('btn btn-primary mt-2 mb-2')} to={configRoutes.routes.roomCategory}>
-            Room Category
-          </Link>
         </div>
         <div className={cx('d-flex', 'align-items-center', 'mr-4')}>
           <span>Search: </span>

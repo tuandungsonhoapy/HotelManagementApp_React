@@ -28,6 +28,7 @@ interface Routes {
   invoiceManagement: string
   invoiceInfoAdmin: string
   serviceManagement: string
+  services: string
 }
 
 const routes: Routes = {
@@ -59,7 +60,8 @@ const routes: Routes = {
   invoiceInfo: '/invoice-info',
   invoiceManagement: '/invoice-management',
   invoiceInfoAdmin: '/invoice-info-admin',
-  serviceManagement: '/service-management'
+  serviceManagement: '/service-management',
+  services: '/services'
 }
 
 export default routes

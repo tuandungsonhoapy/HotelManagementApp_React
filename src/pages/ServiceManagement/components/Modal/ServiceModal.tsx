@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import classNames from 'classnames/bind'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import http from 'Utils/httpRequest'
 import { toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
@@ -9,7 +9,6 @@ import { RootState, useAppDispatch } from 'store'
 import _ from 'lodash'
 import styles from './ServiceModal.module.scss'
 import {
-  setService,
   Service,
   setDefaultService,
   setDescription,

@@ -58,8 +58,11 @@ const InvoiceInfo = () => {
   }, [invoiceId])
 
   const handleDeleteBooking = (id: number) => {
-    http.delete('booking/delete', { params: { id: id } }).then(() => {
-      fetchInvoice()
+    http.delete('booking/delete', { data: { id: id } }).then((res) => {
+      if (res.data === 1) fetchInvoice()
+      else {
+        navigation(configRoutes.routes.danhMucPhong)
+      }
     })
   }
 
@@ -136,9 +139,7 @@ const InvoiceInfo = () => {
                 {note || `Tổng tiền đặt cọc cần thanh toán: ${totalAmount.toLocaleString('vi-VN')}đ`}
               </h4>
               {note && (
-                <h4 style={{ fontWeight: '600', color: 'red' }}>
-                  Vui lòng đợi các phòng hoàn tất thanh toán hoặc chọn phòng khác!
-                </h4>
+                <h4 style={{ fontWeight: '600', color: 'red' }}>Vui lòng chọn phòng khác để tiến hành đặt phòng!</h4>
               )}
             </>
           ) : invoice.status === 1 ? (

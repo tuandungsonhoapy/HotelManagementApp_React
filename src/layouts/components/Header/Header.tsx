@@ -159,6 +159,7 @@ function Header() {
             </Link>
           )}
           <Link to={configRoutes.routes.danhMucPhong}>Danh mục phòng</Link>
+          <Link to={configRoutes.routes.services}>Dịch vụ</Link>
           <Link to={configRoutes.routes.hoiDap}>Hỏi đáp</Link>
           <Link to={configRoutes.routes.blog}>Blogs</Link>
           {currentUser.isAuthenticated ? (

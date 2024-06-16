@@ -4,6 +4,10 @@ import { useEffect, useState } from 'react'
 import http from 'Utils/httpRequest'
 import { toast } from 'react-toastify'
 import { set } from 'lodash'
+import { Link, useNavigate } from 'react-router-dom'
+import configRoutes from '../../config'
+import { useAppDispatch } from 'store'
+import { getRoom } from 'pages/booking.slice'
 
 const cx = classNames.bind(styles)
 
@@ -40,6 +44,12 @@ const RoomDirectory = () => {
   const [option, setOption] = useState<interfaceOption>(initialOption)
   const [rooms, setRooms] = useState<interfaceRoom[]>([])
 
+  const disPatch = useAppDispatch()
+
+  const handleClick = (id: number) => {
+    disPatch(getRoom(id))
+  }
+
   const renderCategories = () => {
     return categories.map((category, index) => {
       return (
@@ -50,25 +60,29 @@ const RoomDirectory = () => {
     })
   }
 
+  const handleShowRoomSelection = () => {}
+
   const renderRooms = () => {
     return rooms.map((room, index) => {
       return (
-        <div key={room.id} className={cx('col-lg-5', 'col-12', 'room_list_item')}>
-          <div className={cx('room_list_item_img_container')}>
-            <img src={room.image} alt='image_test' className={cx('room_list_item_img')} />
+        <Link key={room.id} to={configRoutes.routes.booking} onClick={() => handleClick(room.id)}>
+          <div className={cx('col-lg-5', 'col-12', 'room_list_item')}>
+            <div className={cx('room_list_item_img_container')}>
+              <img src={room.image} alt='image_test' className={cx('room_list_item_img')} />
+            </div>
+            <div className={cx('room_list_item_detail_container')}>
+              <div className={cx('room_list_item_title')}>
+                <span>Phòng {room.roomNumber}</span>
+              </div>
+              <div className={cx('room_list_item_detail')}>
+                <span>{room.description || ''}</span>
+              </div>
+              <div className={cx('room_list_item_price')}>
+                <span>{room.price.toLocaleString('vi-VN')}đ</span>
+              </div>
+            </div>
           </div>
-          <div className={cx('room_list_item_detail_container')}>
-            <div className={cx('room_list_item_title')}>
-              <span>Phòng {room.roomNumber}</span>
-            </div>
-            <div className={cx('room_list_item_detail')}>
-              <span>{room.description || ''}</span>
-            </div>
-            <div className={cx('room_list_item_price')}>
-              <span>{room.price.toLocaleString('vi-VN')}đ</span>
-            </div>
-          </div>
-        </div>
+        </Link>
       )
     })
   }
